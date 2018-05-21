@@ -6,7 +6,7 @@
 #    By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/05/20 19:05:42 by bhamidi           #+#    #+#              #
-#    Updated: 2018/05/21 18:41:36 by bhamidi          ###   ########.fr        #
+#    Updated: 2018/05/21 20:04:48 by bhamidi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ INCLUDE	= ft_nm.h
 OBJS=$(addprefix $(SRC_PATH), $(OBJ))
 INCLUDES=$(addprefix $(INCLUDE_PATH), $(INCLUDE))
 
-all: $(NAME) $(LIBNAME)
+all: $(LIBNAME) $(NAME)
 
 $(NAME): $(OBJS)
 	$(CC) $(OBJS) $(LIBPATH)$(LIBNAME) $(CFLAGS) -o $@
