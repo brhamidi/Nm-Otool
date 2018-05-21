@@ -6,7 +6,7 @@
 #    By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/05/20 19:05:42 by bhamidi           #+#    #+#              #
-#    Updated: 2018/05/20 19:27:22 by bhamidi          ###   ########.fr        #
+#    Updated: 2018/05/21 18:41:36 by bhamidi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,9 +29,9 @@ INCLUDE	= ft_nm.h
 OBJS=$(addprefix $(SRC_PATH), $(OBJ))
 INCLUDES=$(addprefix $(INCLUDE_PATH), $(INCLUDE))
 
-all: $(NAME)
+all: $(NAME) $(LIBNAME)
 
-$(NAME): $(LIBNAME) $(OBJS)
+$(NAME): $(OBJS)
 	$(CC) $(OBJS) $(LIBPATH)$(LIBNAME) $(CFLAGS) -o $@
 	@echo "\033[32m$(NAME) linked\033[0m"
 
@@ -39,7 +39,7 @@ $(SRC_PATH)%.o: $(SRC_PATH)%.c $(INCLUDES) Makefile
 	$(CC) $(CFLAGS) -I $(INCLUDE_PATH) -I $(LIBPATH) -c $< -o $@
 
 $(LIBNAME):
-	make -C $(LIBPATH)
+	@make -C $(LIBPATH)
 
 clean:
 	make clean -C $(LIBPATH)
