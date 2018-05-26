@@ -6,38 +6,11 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 16:30:04 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/05/26 18:30:16 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/05/26 18:31:41 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_nm.h"
-
-int		mh_dylib(void *ptr, size_t file_size)
-{
-	ft_putendl("mh_dylib");
-	return (0);
-}
-int		mh_object(void *ptr, size_t file_size)
-{
-	ft_putendl("mh_object");
-	return (0);
-}
-int		mh_exectue(void *ptr, size_t file_size)
-{
-	ft_putendl("mh_exectue");
-	return (0);
-}
-
-int		(*g_file_type_function[11]) (void *ptr, size_t file_size) = 
-{
-	NULL,
-	mh_object,
-	mh_exectue,
-	NULL,
-	NULL,
-	NULL,
-	mh_dylib
-};
 
 int		handle_64(void *ptr, size_t file_size)
 {
@@ -48,7 +21,8 @@ int		handle_64(void *ptr, size_t file_size)
 	header = (struct mach_header_64 *)ptr;
 	if (sizeof(*header) + header->sizeofcmds > file_size)
 		return (1);
-	return g_file_type_function[header->filetype](ptr, file_size);
+	//TODO loop in load command
+	return (0);
 }
 
 int		map_file(const char *filename)
