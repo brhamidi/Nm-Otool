@@ -6,24 +6,11 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 16:30:04 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/05/26 18:31:41 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/01 17:54:49 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_nm.h"
-
-int		handle_64(void *ptr, size_t file_size)
-{
-	struct mach_header_64	*header;
-
-	if (sizeof(struct mach_header_64) > file_size)
-		return (1);
-	header = (struct mach_header_64 *)ptr;
-	if (sizeof(*header) + header->sizeofcmds > file_size)
-		return (1);
-	//TODO loop in load command
-	return (0);
-}
 
 int		map_file(const char *filename)
 {

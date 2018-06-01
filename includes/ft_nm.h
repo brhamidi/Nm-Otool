@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 16:31:03 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/05/26 17:37:44 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/01 18:24:14 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,7 @@
 # include <mach-o/loader.h>
 
 # include "libft.h"
+
+int		handle_64(void *ptr, const size_t file_size);
 
 #endif
