@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/04 11:18:26 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/05/20 17:36:24 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/02 19:21:29 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@
 # include <unistd.h>
 # include <stdlib.h>
 
+void				ft_putulongnbr(unsigned long int nb, int base);
+void				ft_putnchar(char c, int n);
+unsigned int 		ft_nbytes(const unsigned long int n, int base);
 int					ft_atoi(const char *str);
 char				*ft_strrev(char *src);
 void				ft_putnbr(int nb);

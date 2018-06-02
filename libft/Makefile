@@ -6,7 +6,7 @@
 #    By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/02/11 15:09:11 by bhamidi           #+#    #+#              #
-#    Updated: 2018/05/20 17:37:29 by bhamidi          ###   ########.fr        #
+#    Updated: 2018/06/02 19:18:07 by bhamidi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,10 @@ NAME	= libft.a
 CFLAGS 	= -Wall -Wextra -Werror
 SRCS 	= ft_isalnum.c\
 		ft_isalpha.c\
+		ft_nbytes.c\
+		ft_putnchar.c\
 		ft_isascii.c\
+		ft_putulongnbr.c\
 		ft_isdigit.c\
 		ft_isprint.c\
 		ft_atoi.c\

@@ -6,7 +6,7 @@
 #    By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/05/20 19:05:42 by bhamidi           #+#    #+#              #
-#    Updated: 2018/06/01 17:56:30 by bhamidi          ###   ########.fr        #
+#    Updated: 2018/06/02 18:28:48 by bhamidi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,7 @@ INCLUDES=$(addprefix $(INCLUDE_PATH), $(INCLUDE))
 
 all: $(LIBNAME) $(NAME)
 
-$(NAME): $(OBJS)
+$(NAME): $(OBJS) $(LIBPATH)$(LIBNAME)
 	$(CC) $(OBJS) $(LIBPATH)$(LIBNAME) $(CFLAGS) -o $@
 	@echo "\033[32m$(NAME) linked\033[0m"
 
