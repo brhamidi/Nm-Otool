@@ -61,7 +61,6 @@ struct symtab_command {
 	uint32_t	strsize;	/* string table size in bytes */
 };
 
-
 ============
 UNION lc_str
 ============

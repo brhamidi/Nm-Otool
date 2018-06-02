@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 17:55:13 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/02 15:00:59 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/02 16:22:21 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,7 @@ int	load_cmd(void *ptr, const struct load_command *lc, const size_t size,
 		const unsigned int acc, const uint32_t ncmds)
 {
 	if (acc == ncmds)
-	{
-		ft_putendl_fd("LC_SYMTAB macro not found", 2);
 		return (1);
-	}
 	if (lc->cmd == LC_SYMTAB)
 		return (print_sym(ptr, (struct symtab_command *)lc, 1));
 	return (load_cmd(ptr, (void *)lc + lc->cmdsize, size, acc + 1, ncmds));
