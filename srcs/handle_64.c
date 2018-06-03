@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 17:55:13 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/02 19:24:26 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/03 15:12:36 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,15 @@ char	get_sign(const struct nlist_64 *nlist, const unsigned int acc)
 
 void	display_info(const struct nlist_64 *nlist, const unsigned int acc, const char *strtable)
 {
-	if ((nlist[acc].n_type & N_TYPE) == N_UNDF)
+	const char mask = nlist[acc].n_type & N_TYPE;
+	const char sign = nlist[acc].n_type & N_EXT ? 
+		get_sign(nlist, acc) : ft_tolower(get_sign(nlist, acc));
+
+	if (mask ==  N_UNDF)
 		write(1, "                ", 16);
 	else
 		put_value(nlist[acc].n_value);
-	printf(" %c %s\n", get_sign(nlist, acc), strtable + nlist[acc].n_un.n_strx);
+	printf(" %c %s\n", sign, strtable + nlist[acc].n_un.n_strx);
 }
 
 int	print_sym(void *ptr, const struct symtab_command *symtab, const unsigned int acc)
@@ -60,7 +64,7 @@ int	load_cmd(void *ptr, const struct load_command *lc, const size_t size,
 	if (acc == ncmds)
 		return (1);
 	if (lc->cmd == LC_SYMTAB)
-		return (print_sym(ptr, (struct symtab_command *)lc, 1));
+		return (print_sym(ptr, (struct symtab_command *)lc, 0));
 	return (load_cmd(ptr, (void *)lc + lc->cmdsize, size, acc + 1, ncmds));
 }
 
