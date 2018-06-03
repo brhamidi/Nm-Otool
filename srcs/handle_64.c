@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 17:55:13 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/03 15:12:36 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/03 17:03:06 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,10 @@ void	display_info(const struct nlist_64 *nlist, const unsigned int acc, const ch
 		write(1, "                ", 16);
 	else
 		put_value(nlist[acc].n_value);
-	printf(" %c %s\n", sign, strtable + nlist[acc].n_un.n_strx);
+	ft_putchar(' ');
+	ft_putchar(sign);
+	ft_putchar(' ');
+	ft_putendl(strtable + nlist[acc].n_un.n_strx);
 }
 
 int	print_sym(void *ptr, const struct symtab_command *symtab, const unsigned int acc)
