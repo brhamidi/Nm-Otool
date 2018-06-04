@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 17:55:13 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/04 19:36:13 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/04 19:54:51 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,23 +31,22 @@ char	get_sign(const struct nlist_64 *nlist)
 	return ('?');
 }
 
-void	display_info(const t_sym *list, const char *strtable)
+void	display_info(const t_sym *node, const char *strtable)
 {
-	if (!list)
+	if (!node)
 		return ;
+	const struct nlist_64	*list = (struct nlist_64 *)node->sym;
+	const char 				sign = get_sign(list);
 
-	const char type_mask = list->sym->n_type & N_TYPE;
-	const char sign = get_sign(list->sym);
-
-	if (type_mask == N_UNDF)
+	if ((list->n_type & N_TYPE) == N_UNDF)
 		write(1, "                ", 16);
 	else
-		put_value(list->sym->n_value);
+		put_value(list->n_value);
 	ft_putchar(' ');
 	ft_putchar(sign);
 	ft_putchar(' ');
-	ft_putendl(strtable + list->sym->n_un.n_strx);
-	return display_info(list->next, strtable);
+	ft_putendl(strtable + list->n_un.n_strx);
+	return display_info(node->next, strtable);
 }
 
 int	print_sym(void *ptr, const struct symtab_command *symtab)

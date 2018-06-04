@@ -6,13 +6,13 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/04 18:24:50 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/04 19:20:10 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/04 19:53:34 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_nm.h"
 
-t_sym *create_node(struct nlist_64 *elem)
+t_sym *create_node(void *elem)
 {
 	t_sym	*node;
 
@@ -25,11 +25,22 @@ t_sym *create_node(struct nlist_64 *elem)
 
 void	ft_swap(t_sym *a, t_sym *b)
 {
-	struct nlist_64	*tmp;
+	void	*tmp;
 
 	tmp = a->sym;
 	a->sym = b->sym;
 	b->sym = tmp;
+}
+
+int		predicat(t_sym *a, t_sym *b, const char *strtable)
+{
+	const struct nlist_64	*a_nlist = (struct nlist_64 *)a->sym;
+	const struct nlist_64	*b_nlist = (struct nlist_64 *)b->sym;
+
+	if (ft_strcmp(strtable + a_nlist->n_un.n_strx,
+			strtable + b_nlist->n_un.n_strx) > 0)
+		return (1);
+	return (0);
 }
 
 void	basic_sort(t_sym *list, const char *strtable)
@@ -41,8 +52,7 @@ void	basic_sort(t_sym *list, const char *strtable)
 		tmp = list->next;
 		while (tmp)
 		{
-			if (ft_strcmp(strtable + list->sym->n_un.n_strx,
-						strtable + tmp->sym->n_un.n_strx) > 0)
+			if (predicat(list, tmp, strtable))
 				ft_swap(tmp, list);
 			tmp = tmp->next;
 		}
@@ -62,7 +72,7 @@ void	free_list(t_sym *head)
 	}
 }
 
-int		push_front(t_sym **head, struct nlist_64 *e)
+int		push_front(t_sym **head, void *e)
 {
 	t_sym	*ptr;
 
