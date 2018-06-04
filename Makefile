@@ -6,7 +6,7 @@
 #    By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/05/20 19:05:42 by bhamidi           #+#    #+#              #
-#    Updated: 2018/06/02 18:28:48 by bhamidi          ###   ########.fr        #
+#    Updated: 2018/06/04 18:29:14 by bhamidi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ LIBPATH = libft/
 SRC_PATH		= srcs/
 INCLUDE_PATH	= includes/
 
-OBJ		= main.o handle_64.o
+OBJ		= main.o handle_64.o list_func.o
 
 INCLUDE	= ft_nm.h
 
