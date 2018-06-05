@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 17:55:13 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/05 17:55:56 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/05 18:15:41 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,8 @@ void	put_value(const unsigned long int n)
 	ft_putulongnbr(n, 16);
 }
 
-char	get_sign(const struct nlist_64 *nlist)
+char	get_sign(void)
 {
-	if ((nlist->n_type & N_TYPE) == N_ABS)
-		return ('A');
-	if ((nlist->n_type & N_TYPE) == N_UNDF)
-		return ('U');
-	if (!(nlist->n_sect == NO_SECT))
-		return ('T');
 	return ('?');
 }
 
@@ -36,14 +30,13 @@ void	display_info(const t_sym *node, const char *strtable)
 	if (!node)
 		return ;
 	const struct nlist_64	*list = (struct nlist_64 *)node->sym;
-	const char 				sign = get_sign(list);
 
 	if ((list->n_type & N_TYPE) == N_UNDF)
 		write(1, "                ", 16);
 	else
 		put_value(list->n_value);
 	ft_putchar(' ');
-	ft_putchar(sign);
+	ft_putchar(get_sign());
 	ft_putchar(' ');
 	ft_putendl(strtable + list->n_un.n_strx);
 	return display_info(node->next, strtable);

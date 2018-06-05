@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 16:30:04 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/05 17:58:26 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/05 18:26:01 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,17 @@ uint64_t reverse(uint64_t x, uint64_t r, size_t size, int little)
 	return reverse(x >> 8, (r | (x & 0xFF)) << 8, size - 1, little);
 }
 
-int		nm_object(void * ptr, size_t file_size, int little)
+int		nm_object(void * ptr, size_t file_size)
 {
 	unsigned int magic = * (unsigned int *)ptr;
 
-	(void)file_size;
-	(void)little;
 	if (magic == MH_MAGIC_64)
 		return (handle_64(ptr, file_size));
 	if (magic == MH_MAGIC)
 		ft_putendl("i386 not handle");
 	if (magic == MH_CIGAM_64)
 		ft_putendl("littlen endian x86_64 not handle");
-	if (magic == MH_CIGAM_64)
+	if (magic == MH_CIGAM)
 		ft_putendl("little endian i386 not handle");
 	return (1);
 }
@@ -47,21 +45,20 @@ int		fat_loop(void *ptr, size_t size, int little, uint64_t acc)
 	if (acc == reverse(narch, 0, sizeof(uint32_t), little))
 		return (0);
 	if (nm_object(ptr + reverse(farch->offset, 0, sizeof(uint32_t), little),
-			reverse(farch->size, 0, sizeof(uint32_t), little), little))
+			reverse(farch->size, 0, sizeof(uint32_t), little)))
 		return fat_loop(ptr, size, little, acc + 1);
 	return (0);
 }
 
 int		analyse_file(void *ptr, size_t file_size)
 {
-	//TODO table pointer of function to handle everay magic number
 	unsigned int magic = * (int *)ptr;
 
 	if (magic == FAT_MAGIC)
 		return fat_loop(ptr, file_size, 0, 0);
 	if (magic == reverse(FAT_MAGIC, 0, 4, 1))
 		return fat_loop(ptr, file_size, 1, 0);
-	return (0);
+	return (nm_object(ptr, file_size));
 }
 
 int		map_file(const char *filename)
