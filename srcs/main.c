@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 16:30:04 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/05 18:26:01 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/05 19:17:04 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int		nm_object(void * ptr, size_t file_size)
 	if (magic == MH_MAGIC_64)
 		return (handle_64(ptr, file_size));
 	if (magic == MH_MAGIC)
-		ft_putendl("i386 not handle");
+		return (handle_32(ptr, file_size));
 	if (magic == MH_CIGAM_64)
 		ft_putendl("littlen endian x86_64 not handle");
 	if (magic == MH_CIGAM)
@@ -50,14 +50,32 @@ int		fat_loop(void *ptr, size_t size, int little, uint64_t acc)
 	return (0);
 }
 
+int		fat_loop_64(void *ptr, size_t size, int little, uint64_t acc)
+{
+	const struct fat_header 	*fheader = (struct fat_header *)ptr;
+	const uint32_t				narch = fheader->nfat_arch;
+	const struct fat_arch_64		*farch = ptr + sizeof(*fheader) + (sizeof(*farch) * acc);
+
+	if (acc == reverse(narch, 0, sizeof(uint32_t), little))
+		return (0);
+	if (nm_object(ptr + reverse(farch->offset, 0, sizeof(uint32_t), little),
+			reverse(farch->size, 0, sizeof(uint32_t), little)))
+		return fat_loop(ptr, size, little, acc + 1);
+	return (0);
+}
+
 int		analyse_file(void *ptr, size_t file_size)
 {
 	unsigned int magic = * (int *)ptr;
 
 	if (magic == FAT_MAGIC)
 		return fat_loop(ptr, file_size, 0, 0);
-	if (magic == reverse(FAT_MAGIC, 0, 4, 1))
+	if (magic == FAT_CIGAM)
 		return fat_loop(ptr, file_size, 1, 0);
+	if (magic == FAT_MAGIC_64)
+		return fat_loop_64(ptr, file_size, 0, 0);
+	if (magic == FAT_CIGAM_64)
+		return fat_loop_64(ptr, file_size, 1, 0);
 	return (nm_object(ptr, file_size));
 }
 

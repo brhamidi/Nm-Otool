@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 16:31:03 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/05 17:07:28 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/05 19:21:31 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,10 @@ struct	s_sym
 	struct s_sym	*next;
 };
 
+void	put_value(const unsigned long int n, int pad);
+char	get_sign(void);
 int		handle_64(void *ptr, const size_t file_size);
+int		handle_32(void *ptr, const size_t file_size);
 void	free_list(t_sym *head);
 int		push_front(t_sym **head, void *e);
 void	basic_sort(t_sym *list, const char *strtable, int (*f)(t_sym*, t_sym*, const char *));
