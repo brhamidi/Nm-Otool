@@ -6,19 +6,62 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 16:30:04 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/04 19:26:40 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/05 17:58:26 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_nm.h"
 
-int		ft_nm(void * ptr, size_t file_size)
+uint64_t reverse(uint64_t x, uint64_t r, size_t size, int little)
+{
+	if (! little)
+		return x;
+	if (! (size - 1))
+		return r | (x & 0x000000FF);
+	return reverse(x >> 8, (r | (x & 0xFF)) << 8, size - 1, little);
+}
+
+int		nm_object(void * ptr, size_t file_size, int little)
 {
 	unsigned int magic = * (unsigned int *)ptr;
 
+	(void)file_size;
+	(void)little;
 	if (magic == MH_MAGIC_64)
 		return (handle_64(ptr, file_size));
-	return (255);
+	if (magic == MH_MAGIC)
+		ft_putendl("i386 not handle");
+	if (magic == MH_CIGAM_64)
+		ft_putendl("littlen endian x86_64 not handle");
+	if (magic == MH_CIGAM_64)
+		ft_putendl("little endian i386 not handle");
+	return (1);
+}
+
+int		fat_loop(void *ptr, size_t size, int little, uint64_t acc)
+{
+	const struct fat_header 	*fheader = (struct fat_header *)ptr;
+	const uint32_t				narch = fheader->nfat_arch;
+	const struct fat_arch		*farch = ptr + sizeof(*fheader) + (sizeof(*farch) * acc);
+
+	if (acc == reverse(narch, 0, sizeof(uint32_t), little))
+		return (0);
+	if (nm_object(ptr + reverse(farch->offset, 0, sizeof(uint32_t), little),
+			reverse(farch->size, 0, sizeof(uint32_t), little), little))
+		return fat_loop(ptr, size, little, acc + 1);
+	return (0);
+}
+
+int		analyse_file(void *ptr, size_t file_size)
+{
+	//TODO table pointer of function to handle everay magic number
+	unsigned int magic = * (int *)ptr;
+
+	if (magic == FAT_MAGIC)
+		return fat_loop(ptr, file_size, 0, 0);
+	if (magic == reverse(FAT_MAGIC, 0, 4, 1))
+		return fat_loop(ptr, file_size, 1, 0);
+	return (0);
 }
 
 int		map_file(const char *filename)
@@ -34,7 +77,7 @@ int		map_file(const char *filename)
 		return (2);
 	if ((ptr = mmap(0, buf.st_size, PROT_READ, MAP_PRIVATE, fd, 0)) == MAP_FAILED)
 		return (3);
-	code = ft_nm(ptr, buf.st_size);
+	code = analyse_file(ptr, buf.st_size);
 	if (close(fd) == -1)
 		return (4);
 	if (munmap(ptr, buf.st_size))

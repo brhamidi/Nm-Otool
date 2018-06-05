@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/04 18:24:50 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/04 19:53:34 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/05 13:11:48 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int		predicat(t_sym *a, t_sym *b, const char *strtable)
 	return (0);
 }
 
-void	basic_sort(t_sym *list, const char *strtable)
+void	basic_sort(t_sym *list, const char *strtable, int (*f)(t_sym*, t_sym*, const char *))
 {
 	t_sym	*tmp;
 
@@ -52,7 +52,7 @@ void	basic_sort(t_sym *list, const char *strtable)
 		tmp = list->next;
 		while (tmp)
 		{
-			if (predicat(list, tmp, strtable))
+			if (f(list, tmp, strtable))
 				ft_swap(tmp, list);
 			tmp = tmp->next;
 		}

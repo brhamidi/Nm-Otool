@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 17:55:13 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/04 19:54:51 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/05 17:55:56 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ int	print_sym(void *ptr, const struct symtab_command *symtab)
 	unsigned int	i;
 	t_sym			*list;
 
+	if (!symtab->nsyms)
+		return (1);
 	list = NULL;
 	i = -1;
 	while (++i < symtab->nsyms)
@@ -64,7 +66,7 @@ int	print_sym(void *ptr, const struct symtab_command *symtab)
 			free_list(list);
 			return (1);
 		}
-	basic_sort(list, strtable);
+	basic_sort(list, strtable, & predicat);
 	display_info(list, strtable);
 	free_list(list);
 	return (0);
