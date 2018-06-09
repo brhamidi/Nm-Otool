@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 16:31:03 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/05 19:21:31 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/09 15:36:03 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 
 # include "libft.h"
 
+# define RANLIB_MAGIC	"!<arch>\n"
+
 typedef struct s_sym	t_sym;
 
 struct	s_sym
@@ -33,6 +35,9 @@ struct	s_sym
 	struct s_sym	*next;
 };
 
+int		ranlib(void *ptr, size_t size);
+uint64_t reverse(uint64_t x, uint64_t r, size_t size, int little);
+int		nm_object(void * ptr, size_t file_size);
 void	put_value(const unsigned long int n, int pad);
 char	get_sign(void);
 int		handle_64(void *ptr, const size_t file_size);

@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 16:30:04 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/05 19:17:04 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/09 15:35:26 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,21 +19,6 @@ uint64_t reverse(uint64_t x, uint64_t r, size_t size, int little)
 	if (! (size - 1))
 		return r | (x & 0x000000FF);
 	return reverse(x >> 8, (r | (x & 0xFF)) << 8, size - 1, little);
-}
-
-int		nm_object(void * ptr, size_t file_size)
-{
-	unsigned int magic = * (unsigned int *)ptr;
-
-	if (magic == MH_MAGIC_64)
-		return (handle_64(ptr, file_size));
-	if (magic == MH_MAGIC)
-		return (handle_32(ptr, file_size));
-	if (magic == MH_CIGAM_64)
-		ft_putendl("littlen endian x86_64 not handle");
-	if (magic == MH_CIGAM)
-		ft_putendl("little endian i386 not handle");
-	return (1);
 }
 
 int		fat_loop(void *ptr, size_t size, int little, uint64_t acc)
@@ -54,7 +39,7 @@ int		fat_loop_64(void *ptr, size_t size, int little, uint64_t acc)
 {
 	const struct fat_header 	*fheader = (struct fat_header *)ptr;
 	const uint32_t				narch = fheader->nfat_arch;
-	const struct fat_arch_64		*farch = ptr + sizeof(*fheader) + (sizeof(*farch) * acc);
+	const struct fat_arch_64	*farch = ptr + sizeof(*fheader) + (sizeof(*farch) * acc);
 
 	if (acc == reverse(narch, 0, sizeof(uint32_t), little))
 		return (0);
@@ -62,6 +47,24 @@ int		fat_loop_64(void *ptr, size_t size, int little, uint64_t acc)
 			reverse(farch->size, 0, sizeof(uint32_t), little)))
 		return fat_loop(ptr, size, little, acc + 1);
 	return (0);
+}
+
+int		nm_object(void * ptr, size_t file_size)
+{
+	unsigned int magic = * (unsigned int *)ptr;
+	char		*ran = (char *)ptr;
+
+	if (magic == MH_MAGIC_64)
+		return (handle_64(ptr, file_size));
+	if (magic == MH_MAGIC)
+		return (handle_32(ptr, file_size));
+	if (magic == MH_CIGAM_64)
+		ft_putendl("littlen endian x86_64 not handle");
+	if (magic == MH_CIGAM)
+		ft_putendl("little endian i386 not handle");
+	if (! ft_strncmp(ran, RANLIB_MAGIC, 8))
+		ranlib(ptr, file_size);
+	return (1);
 }
 
 int		analyse_file(void *ptr, size_t file_size)
