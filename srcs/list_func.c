@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/04 18:24:50 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/13 16:11:54 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/14 18:39:45 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,18 @@ void	ft_swap(t_sym *a, t_sym *b)
 	b->sym = tmp;
 }
 
-int		predicat(t_sym *a, t_sym *b, const char *strtable)
+int		predicat64(t_sym *a, t_sym *b, const char *strtable)
 {
 	const struct nlist_64	*a_nlist = (struct nlist_64 *)a->sym;
 	const struct nlist_64	*b_nlist = (struct nlist_64 *)b->sym;
+
+	return (ft_strcmp(strtable + a_nlist->n_un.n_strx, strtable + b_nlist->n_un.n_strx) > 0);
+}
+
+int		predicat(t_sym *a, t_sym *b, const char *strtable)
+{
+	const struct nlist	*a_nlist = (struct nlist *)a->sym;
+	const struct nlist	*b_nlist = (struct nlist *)b->sym;
 
 	return (ft_strcmp(strtable + a_nlist->n_un.n_strx, strtable + b_nlist->n_un.n_strx) > 0);
 }

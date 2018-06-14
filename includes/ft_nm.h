@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 16:31:03 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/14 18:21:57 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/14 18:39:59 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,5 +63,6 @@ int			push_front(t_sym **head, void *e);
 void		basic_sort(t_sym *list, const char *strtable,
 		int (*f)(t_sym*, t_sym*, const char *));
 int			predicat(t_sym *a, t_sym *b, const char *strtable);
+int			predicat64(t_sym *a, t_sym *b, const char *strtable);
 
 #endif
