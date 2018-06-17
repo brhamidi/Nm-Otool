@@ -6,11 +6,21 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/14 15:42:54 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/14 17:32:14 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/17 15:24:20 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_nm.h"
+
+void	put_value(const uint64_t n, int padd)
+{
+	const unsigned int len = ft_nbytes(n, 16);
+
+	(void)len;
+	(void)padd;
+	ft_putnchar('0', padd - len);
+	ft_putulongnbr(n, 16);
+}
 
 int			check(t_info *inf, void *addr, size_t size)
 {
