@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/13 18:49:21 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/17 15:43:49 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/17 20:03:15 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,42 +21,50 @@ const char	*arch_name[4] = {
 
 void	display_info64(const t_sym *node, t_info *inf, const char *strtable)
 {
-	const struct nlist_64	*list;
+	struct nlist_64	*list;
+	uint8_t			type;
 
 	if (!node)
 		return;
 	if (check(inf, node->sym, sizeof(*list)))
 		return;
 	list = (struct nlist_64 *)node->sym;
-	if ((rev(list->n_type, 0, 1, inf->endian) & N_TYPE) == N_UNDF)
+	type = rev(list->n_type, 0, 1, inf->endian);
+	if (type & N_STAB) // skip symbol with debugging entry
+		return (display_info64(node->next, inf, strtable));
+	if ((type & N_TYPE) == N_UNDF)
 		ft_putnchar(' ', 16);
 	else
 		put_value(rev(list->n_value, 0, sizeof(uint64_t), inf->endian), 16);
 	ft_putchar(' ');
-	ft_putchar('X');
+	ft_putchar('?');
 	ft_putchar(' ');
 	ft_putendl(strtable + rev(list->n_un.n_strx, 0, sizeof(uint32_t), inf->endian));
-	return display_info64(node->next, inf, strtable);
+	return (display_info64(node->next, inf, strtable));
 }
 
 void	display_info(const t_sym *node, t_info *inf, const char *strtable)
 {
-	const struct nlist	*list;
+	struct nlist	*list;
+	uint8_t			type;
 
 	if (!node)
 		return;
 	if (check(inf, node->sym, sizeof(*list)))
 		return;
 	list = (struct nlist *)node->sym;
-	if ((rev(list->n_type, 0, 1, inf->endian) & N_TYPE) == N_UNDF)
+	type = rev(list->n_type, 0, 1, inf->endian);
+	if (type & N_STAB) // skip symbol with debugging entry
+		return (display_info64(node->next, inf, strtable));
+	if ((type & N_TYPE) == N_UNDF)
 		ft_putnchar(' ', 8);
 	else
 		put_value(rev(list->n_value, 0, sizeof(uint32_t), inf->endian), 8);
 	ft_putchar(' ');
-	ft_putchar('X');
+	ft_putchar('?');
 	ft_putchar(' ');
 	ft_putendl(strtable + rev(list->n_un.n_strx, 0, sizeof(uint32_t), inf->endian));
-	return display_info(node->next, inf, strtable);
+	return (display_info(node->next, inf, strtable));
 }
 
 int		ft_nlist(t_info *inf, struct nlist *nlist, uint32_t nsyms, uint32_t stroff)
@@ -78,7 +86,7 @@ int		ft_nlist64(t_info *inf, struct nlist_64 *nlist, uint32_t nsyms, uint32_t st
 {
 	if (!nsyms)
 	{
-		basic_sort(inf->list, inf->ptr+ stroff, predicat64);
+		basic_sort(inf->list, inf->ptr + stroff, predicat64);
 		display_info64(inf->list, inf, inf->ptr + stroff);
 		free_list(inf->list);
 		return (0);
