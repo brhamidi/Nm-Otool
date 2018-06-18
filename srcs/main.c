@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 16:30:04 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/18 15:25:05 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/18 18:24:25 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,15 @@ int		analyse_file(t_info *inf)
 	return (-2);
 }
 
+int		error_file(const char *prog_name, const char *file_name)
+{
+	ft_putstr_fd(prog_name, 2);
+	ft_putstr_fd(": ", 2);
+	ft_putstr_fd(file_name, 2);
+	ft_putendl_fd(": No such file or directory.", 2);
+	return (1);
+}
+
 int		map_file(const char *filename)
 {
 	int				fd;
@@ -79,12 +88,18 @@ int		map_file(const char *filename)
 
 int		rec_arg(const int ac, const char **av, const int acc)
 {
+	int code;
+
+	code = 0;
 	if (acc == ac)
 		return (0);
 	ft_putchar('\n');
 	ft_putstr(av[acc]);
 	ft_putstr(":\n");
-	if (map_file(av[acc]))
+	code = map_file(av[acc]);
+	if (code == 2)
+		error_file(av[0], av[acc]);
+	if (code)
 		return (1 + rec_arg(ac, av, acc + 1));
 	return (rec_arg(ac, av, acc + 1));
 }
@@ -92,8 +107,15 @@ int		rec_arg(const int ac, const char **av, const int acc)
 int		main(int ac, char **av)
 {
 	if (ac == 1)
-		return (map_file("a.out"));
-	if (ac == 2)
-		return (map_file(av[1]));
-	return (rec_arg(ac, (const char **)av, 1));
+	{
+		if (map_file("a.out") == 2)
+			return error_file(av[0], "a.out");
+	}
+	else if (ac == 2)
+	{
+		if (map_file(av[1]) == 2)
+			return error_file(av[0], av[1]);
+	}
+	else
+		return (rec_arg(ac, (const char **)av, 1));
 }

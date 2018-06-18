@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/13 18:49:21 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/18 14:55:34 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/18 20:02:04 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ void	display_info64(const t_sym *node, t_info *inf, const char *strtable)
 	ft_putchar(' ');
 	ft_putchar('?');
 	ft_putchar(' ');
+	if (str_safe(inf, strtable + rev(list->n_un.n_strx, 0, sizeof(uint32_t), inf->endian)))
+		return;
 	ft_putendl(strtable + rev(list->n_un.n_strx, 0, sizeof(uint32_t), inf->endian));
 	return (display_info64(node->next, inf, strtable));
 }
@@ -63,6 +65,8 @@ void	display_info(const t_sym *node, t_info *inf, const char *strtable)
 	ft_putchar(' ');
 	ft_putchar('?');
 	ft_putchar(' ');
+	if (str_safe(inf, strtable + rev(list->n_un.n_strx, 0, sizeof(uint32_t), inf->endian)))
+		return;
 	ft_putendl(strtable + rev(list->n_un.n_strx, 0, sizeof(uint32_t), inf->endian));
 	return (display_info(node->next, inf, strtable));
 }
@@ -71,7 +75,11 @@ int		ft_nlist(t_info *inf, struct nlist *nlist, uint32_t nsyms, uint32_t stroff)
 {
 	if (!nsyms)
 	{
-		basic_sort(inf->list, inf->ptr + stroff, predicat64, inf);
+		if (basic_sort(inf->list, inf->ptr + stroff, predicat64, inf) == -1)
+		{
+			free_list(inf->list);
+			return (1);
+		}
 		display_info(inf->list, inf, inf->ptr + stroff);
 		free_list(inf->list);
 		return (0);
@@ -86,7 +94,11 @@ int		ft_nlist64(t_info *inf, struct nlist_64 *nlist, uint32_t nsyms, uint32_t st
 {
 	if (!nsyms)
 	{
-		basic_sort(inf->list, inf->ptr + stroff, predicat64, inf);
+		if (basic_sort(inf->list, inf->ptr + stroff, predicat64, inf) == -1)
+		{
+			free_list(inf->list);
+			return (1);
+		}
 		display_info64(inf->list, inf, inf->ptr + stroff);
 		free_list(inf->list);
 		return (0);
