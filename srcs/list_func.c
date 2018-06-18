@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/04 18:24:50 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/18 20:03:01 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/18 20:10:57 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int		basic_sort(t_sym *list, const char *strtable,
 	return (0);
 }
 
-void	free_list(t_sym *head)
+int		free_list(t_sym *head)
 {
 	t_sym *tmp;
 
@@ -79,6 +79,7 @@ void	free_list(t_sym *head)
 		head = head->next;
 		free(tmp);
 	}
+	return (0);
 }
 
 int		push_front(t_sym **head, void *e)

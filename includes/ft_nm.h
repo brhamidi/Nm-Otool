@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 16:31:03 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/18 20:02:20 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/18 20:10:43 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int 		obj_fat(t_info *inf);
 int 		obj_fat64(t_info *inf);
 int 		obj(t_info *inf);
 int			obj64(t_info *inf);
-void		free_list(t_sym *head);
+int			free_list(t_sym *head);
 int			push_front(t_sym **head, void *e);
 int			basic_sort(t_sym *list, const char *strtable,
 		int (*f)(t_sym*, t_sym*, const char *, t_info *), t_info *inf);
