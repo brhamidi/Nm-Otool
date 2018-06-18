@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 16:31:03 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/17 19:16:25 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/18 15:19:22 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,13 @@
 typedef struct s_sym	t_sym;
 typedef struct s_info	t_info;
 
+typedef enum e_mode {
+	CHECK,
+	SINGLE,
+	FULL
+}			t_mode;
+
+
 typedef enum e_arch {
 	I386,
 	X86_64,
@@ -39,11 +46,13 @@ typedef enum e_arch {
 
 struct s_info
 {
-	void	*ptr;
-	void	*end;
-	int		endian;
-	t_arch	arch;
-	t_sym	*list;
+	void		*ptr;
+	const char	*file_name;
+	void		*end;
+	int			endian;
+	t_arch		arch;
+	t_sym		*list;
+	t_mode		mode;
 };
 
 struct	s_sym
@@ -63,7 +72,7 @@ int			obj64(t_info *inf);
 void		free_list(t_sym *head);
 int			push_front(t_sym **head, void *e);
 void		basic_sort(t_sym *list, const char *strtable,
-		int (*f)(t_sym*, t_sym*, const char *));
-int			predicat64(t_sym *a, t_sym *b, const char *strtable);
+		int (*f)(t_sym*, t_sym*, const char *, t_info *), t_info *inf);
+int			predicat64(t_sym *a, t_sym *b, const char *strtable, t_info *inf);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 16:30:04 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/17 20:09:07 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/18 15:25:05 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int		analyse_file(t_info *inf)
 	while (++i < 4)
 		if (magic_tab[i] == rev(magic, 0, 4, inf->endian))
 			return func_tab[i](inf);
-	ft_putendl("The file was not recognized as a valid object file");
+	ft_putendl_fd("The file was not recognized as a valid object file", 2);
 	return (-2);
 }
 
@@ -67,6 +67,8 @@ int		map_file(const char *filename)
 	if ((inf.ptr = mmap(0, buf.st_size, PROT_READ, MAP_PRIVATE, fd, 0)) == MAP_FAILED)
 		return (4);
 	inf.end = inf.ptr + buf.st_size;
+	inf.mode = CHECK;
+	inf.file_name = filename;
 	code = analyse_file(&inf);
 	if (close(fd) == -1)
 		return (5);

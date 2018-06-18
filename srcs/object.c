@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/13 18:49:21 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/17 20:03:15 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/18 14:55:34 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int		ft_nlist(t_info *inf, struct nlist *nlist, uint32_t nsyms, uint32_t stroff)
 {
 	if (!nsyms)
 	{
-		basic_sort(inf->list, inf->ptr + stroff, predicat64);
+		basic_sort(inf->list, inf->ptr + stroff, predicat64, inf);
 		display_info(inf->list, inf, inf->ptr + stroff);
 		free_list(inf->list);
 		return (0);
@@ -86,7 +86,7 @@ int		ft_nlist64(t_info *inf, struct nlist_64 *nlist, uint32_t nsyms, uint32_t st
 {
 	if (!nsyms)
 	{
-		basic_sort(inf->list, inf->ptr + stroff, predicat64);
+		basic_sort(inf->list, inf->ptr + stroff, predicat64, inf);
 		display_info64(inf->list, inf, inf->ptr + stroff);
 		free_list(inf->list);
 		return (0);
@@ -131,7 +131,8 @@ int 	load(t_info *inf, void *curr, size_t ncmds, size_t acc)
 	lc = (struct load_command *)curr;
 	if (rev(lc->cmd, 0, sizeof(uint32_t), inf->endian) == LC_SYMTAB)
 		return (symtab(inf, curr));
-	return (load(inf, curr + lc->cmdsize, ncmds, acc + 1));
+	return (load(inf, curr + rev(lc->cmdsize, 0, sizeof(uint32_t), inf->endian),
+				ncmds, acc + 1));
 }
 
 int		obj(t_info *inf)
