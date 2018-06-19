@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 16:30:04 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/18 18:24:25 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/19 15:16:27 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,15 @@ int		analyse_file(t_info *inf)
 		obj,
 		obj64
 	};
+	char				*smagic;
 
 	inf->list = NULL;
 	inf->endian = get_endianess(inf);
 	if (inf->endian == -1)
 		return (-1);
+	smagic = (char *)inf->ptr;
+	if (! ft_strncmp(smagic, RANLIB_MAGIC, 8))
+		return (ranlib(inf));
 	magic = *(unsigned int *)inf->ptr;
 	i = -1;
 	while (++i < 4)

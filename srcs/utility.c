@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/14 15:42:54 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/18 20:02:11 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/19 18:38:29 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 int	 str_safe(t_info * inf, const char *str)
 {
-	if (!*str)
-		return (0);
 	if (check(inf, (void *)str, 1))
 		return (1);
+	if (!*str)
+		return (0);
 	return (str_safe(inf, str + 1));
 }
 

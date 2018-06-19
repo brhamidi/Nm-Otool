@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 16:31:03 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/18 20:10:43 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/19 15:16:08 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ uint64_t	rev(uint64_t x, uint64_t r, size_t size, int little);
 int 		obj_fat(t_info *inf);
 int 		obj_fat64(t_info *inf);
 int 		obj(t_info *inf);
+int			ranlib(t_info *inf);
 int			obj64(t_info *inf);
 int			free_list(t_sym *head);
 int			push_front(t_sym **head, void *e);

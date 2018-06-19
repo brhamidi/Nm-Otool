@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/13 18:49:21 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/18 20:12:49 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/19 15:07:18 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,5 +158,5 @@ int		obj64(t_info *inf)
 		return (-1);
 	inf->arch = X86_64;
 	header = (struct mach_header_64*)inf->ptr;
-	return load(inf, inf->ptr + sizeof(*header), header->ncmds, 0);
+	return (load(inf, inf->ptr + sizeof(*header), header->ncmds, 0));
 }
