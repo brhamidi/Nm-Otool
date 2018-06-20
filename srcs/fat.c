@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/13 18:48:56 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/18 17:23:28 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/20 16:14:38 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ int obj_fat(t_info *inf)
 		}
 		i++;
 	}
+	if (inf->mode == CHECK)
+		return (-1);
 	if (inf->mode == FULL)
 		return (0);
 	inf->mode = FULL;
@@ -114,9 +116,10 @@ int obj_fat64(t_info *inf)
 		}
 		i++;
 	}
+	if (inf->mode == CHECK)
+		return (-1);
 	if (inf->mode == FULL)
 		return (0);
 	inf->mode = FULL;
 	return obj_fat(inf);
-	return (0);
 }
