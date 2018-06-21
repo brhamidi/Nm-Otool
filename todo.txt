@@ -1,3 +1,0 @@
--- handle archive library
--- main verification
--- code otool

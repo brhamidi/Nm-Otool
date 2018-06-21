@@ -6,38 +6,47 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/13 18:48:56 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/21 16:23:06 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/21 17:48:34 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_nm.h"
 
-char            *get_cputype(cpu_type_t cputype)
+const char            *get_cputype(cpu_type_t cputype)
 {
-	if (cputype == CPU_TYPE_VAX)
-		return ("vax");
-	else if (cputype == CPU_TYPE_MC680x0)
-		return ("mc680");
-	else if (cputype == CPU_TYPE_X86 || cputype == CPU_TYPE_I386)
-		return ("i386");
-	else if (cputype == CPU_TYPE_X86_64)
-		return ("x86_64");
-	else if (cputype == CPU_TYPE_MC98000)
-		return ("mc98000");
-	else if (cputype == CPU_TYPE_HPPA)
-		return ("hppa");
-	else if (cputype == CPU_TYPE_ARM)
-		return ("arm");
-	else if (cputype == CPU_TYPE_SPARC)
-		return ("sparc");
-	else if (cputype == CPU_TYPE_I860)
-		return ("i860");
-	else if (cputype == CPU_TYPE_POWERPC)
-		return ("ppc");
-	else if (cputype == CPU_TYPE_POWERPC64)
-		return ("ppc64");
-	else
-		return ("?");
+	const cpu_type_t	cpu_tab[] = {
+		CPU_TYPE_VAX,
+		CPU_TYPE_MC680x0,
+		CPU_TYPE_X86,
+		CPU_TYPE_I386,
+		CPU_TYPE_MC98000,
+		CPU_TYPE_HPPA,
+		CPU_TYPE_ARM,
+		CPU_TYPE_SPARC,
+		CPU_TYPE_POWERPC,
+		CPU_TYPE_I860,
+		CPU_TYPE_POWERPC64
+	};
+	const char	*cpu_name_tab[] = {
+		"vax",
+		"mc680",
+		"i386",
+		"i386",
+		"x86_64",
+		"mc98000",
+		"hppa",
+		"arm",
+		"sparc",
+		"ppc",
+		"i860",
+		"ppc64"
+	};
+	unsigned long i = -1;
+
+	while (++i < sizeof(cpu_name_tab) / sizeof(*cpu_name_tab))
+		if (cpu_tab[i] == cputype)
+			return (cpu_name_tab[i]);
+	return "?";
 }
 
 int obj_fat(t_info *inf)

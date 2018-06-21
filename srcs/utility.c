@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/14 15:42:54 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/21 15:39:03 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/21 17:48:15 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,10 @@
 
 int	 str_safe(t_info * inf, const void *str)
 {
-	ft_putendl("ENTER");
 	if (check(inf, str, 1))
 		return (1);
 	if (! *(const char *)str)
 		return (0);
-	ft_putendl("REC");
 	return (str_safe(inf, str + 1));
 }
 
@@ -33,8 +31,8 @@ void	put_value(const uint64_t n, int padd)
 
 int			check(t_info *inf, const void *addr, size_t size)
 {
-	return ((addr >= inf->ptr && (addr + size) < inf->end
-			&& (addr + size) > addr) ? 0 : 1);
+	return ((addr >= inf->ptr && (addr + size) <= inf->end
+			&& (addr + size) >= addr) ? 0 : 1);
 }
 
 uint64_t	rev(uint64_t x, uint64_t r, size_t size, int endian)
