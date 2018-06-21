@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 16:31:03 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/21 15:02:40 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/21 15:35:55 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,11 @@ struct	s_sym
 	struct s_sym	*next;
 };
 
-int	 		str_safe(t_info * inf, const char *str);
+int	 		str_safe(t_info * inf, const void *str);
 int			analyse_file(t_info *inf);
 int			analyse_object(t_info *inf);
 void		put_value(const uint64_t n, int padd);
-int			check(t_info *inf, void *addr, size_t size);
+int			check(t_info *inf, const void *addr, size_t size);
 uint64_t	rev(uint64_t x, uint64_t r, size_t size, int little);
 int 		obj_fat(t_info *inf);
 int 		obj_fat64(t_info *inf);
