@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/13 18:49:21 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/19 15:07:18 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/21 18:37:11 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,25 @@ const char	*arch_name[4] = {
 	"PPC",
 	"PPC64"
 };
+
+char   get_sign(const struct nlist *nlist)
+{
+	if ((nlist->n_type & N_TYPE) == N_SECT)
+	{
+		printf("nsect: %d\n", nlist->n_sect);
+		if ((nlist->n_sect != NO_SECT))
+		{
+			return 'T';
+		}
+	}
+	if ((nlist->n_type & N_TYPE) == N_UNDF)
+		return 'U';
+	if ((nlist->n_type & N_TYPE) == N_ABS)
+		return 'A';
+	if ((nlist->n_type & N_TYPE) == N_INDR)
+		return 'I';
+	return '?';
+}
 
 void	display_info64(const t_sym *node, t_info *inf, const char *strtable)
 {
@@ -37,7 +56,7 @@ void	display_info64(const t_sym *node, t_info *inf, const char *strtable)
 	else
 		put_value(rev(list->n_value, 0, sizeof(uint64_t), inf->endian), 16);
 	ft_putchar(' ');
-	ft_putchar('?');
+	ft_putchar(get_sign((const struct nlist*)list));
 	ft_putchar(' ');
 	if (str_safe(inf, strtable + rev(list->n_un.n_strx, 0, sizeof(uint32_t), inf->endian)))
 		return;
@@ -63,7 +82,7 @@ void	display_info(const t_sym *node, t_info *inf, const char *strtable)
 	else
 		put_value(rev(list->n_value, 0, sizeof(uint32_t), inf->endian), 8);
 	ft_putchar(' ');
-	ft_putchar('?');
+	ft_putchar(get_sign(list));
 	ft_putchar(' ');
 	if (str_safe(inf, strtable + rev(list->n_un.n_strx, 0, sizeof(uint32_t), inf->endian)))
 		return;
