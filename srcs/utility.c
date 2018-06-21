@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/14 15:42:54 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/19 18:38:29 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/21 15:15:18 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	 str_safe(t_info * inf, const char *str)
 {
-	if (check(inf, (void *)str, 1))
+	if (check(inf, (void *)str, 0))
 		return (1);
 	if (!*str)
 		return (0);
@@ -32,7 +32,7 @@ void	put_value(const uint64_t n, int padd)
 int			check(t_info *inf, void *addr, size_t size)
 {
 	return ((addr >= inf->ptr && (addr + size) < inf->end
-			&& (addr + size) > addr) ? 0 : 1);
+			&& (addr + size) >= addr) ? 0 : 1);
 }
 
 uint64_t	rev(uint64_t x, uint64_t r, size_t size, int endian)

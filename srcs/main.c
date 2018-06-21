@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 16:30:04 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/19 15:16:27 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/21 15:02:54 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,36 @@ int		get_endianess(t_info *inf)
 	m = *(unsigned int *)inf->ptr;
 	return (m == FAT_CIGAM || m == FAT_CIGAM_64
 			|| m == MH_CIGAM_64 || m == MH_CIGAM) ? 1 : 0;
+}
+
+int		analyse_object(t_info *inf)
+{
+	unsigned int		magic;
+	int					i;
+	const unsigned int	magic_tab[4] = {
+		MH_MAGIC,
+		MH_MAGIC_64
+	};
+	int (* const func_tab[4])(t_info *) = {
+		obj,
+		obj64
+	};
+	char				*smagic;
+
+	inf->list = NULL;
+	inf->endian = get_endianess(inf);
+	if (inf->endian == -1)
+		return (-1);
+	smagic = (char *)inf->ptr;
+	if (! ft_strncmp(smagic, RANLIB_MAGIC, 8))
+		return (ranlib(inf));
+	magic = *(unsigned int *)inf->ptr;
+	i = -1;
+	while (++i < 2)
+		if (magic_tab[i] == rev(magic, 0, 4, inf->endian))
+			return func_tab[i](inf);
+	ft_putendl_fd("The file was not recognized as a valid object file", 2);
+	return (-2);
 }
 
 int		analyse_file(t_info *inf)
