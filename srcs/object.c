@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/13 18:49:21 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/21 18:37:11 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/25 12:21:07 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,8 @@ char   get_sign(const struct nlist *nlist)
 {
 	if ((nlist->n_type & N_TYPE) == N_SECT)
 	{
-		printf("nsect: %d\n", nlist->n_sect);
 		if ((nlist->n_sect != NO_SECT))
-		{
 			return 'T';
-		}
 	}
 	if ((nlist->n_type & N_TYPE) == N_UNDF)
 		return 'U';

@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 16:31:03 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/21 15:35:55 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/25 15:50:01 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@
 # include <mach-o/loader.h>
 # include <mach-o/nlist.h>
 # include <mach-o/fat.h>
+# include <ar.h>
+# include <mach-o/ranlib.h>
 
 # include "libft.h"
-
-# define RANLIB_MAGIC	"!<arch>\n"
 
 typedef struct s_sym	t_sym;
 typedef struct s_info	t_info;

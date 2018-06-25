@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 16:30:04 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/21 15:02:54 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/25 14:43:55 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,11 @@ int		analyse_object(t_info *inf)
 {
 	unsigned int		magic;
 	int					i;
-	const unsigned int	magic_tab[4] = {
+	const unsigned int	magic_tab[2] = {
 		MH_MAGIC,
 		MH_MAGIC_64
 	};
-	int (* const func_tab[4])(t_info *) = {
+	int (* const func_tab[2])(t_info *) = {
 		obj,
 		obj64
 	};
@@ -42,7 +42,7 @@ int		analyse_object(t_info *inf)
 	if (inf->endian == -1)
 		return (-1);
 	smagic = (char *)inf->ptr;
-	if (! ft_strncmp(smagic, RANLIB_MAGIC, 8))
+	if (! ft_strncmp(smagic, ARMAG, SARMAG))
 		return (ranlib(inf));
 	magic = *(unsigned int *)inf->ptr;
 	i = -1;
@@ -76,7 +76,7 @@ int		analyse_file(t_info *inf)
 	if (inf->endian == -1)
 		return (-1);
 	smagic = (char *)inf->ptr;
-	if (! ft_strncmp(smagic, RANLIB_MAGIC, 8))
+	if (! ft_strncmp(smagic, ARMAG, SARMAG))
 		return (ranlib(inf));
 	magic = *(unsigned int *)inf->ptr;
 	i = -1;
