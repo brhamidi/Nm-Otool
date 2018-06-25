@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/19 15:14:59 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/25 17:13:13 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/25 20:40:23 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,6 @@ void	ft_putnstr(const char *str, size_t n)
 		return;
 	ft_putchar(*str);
 	ft_putnstr(str + 1, n - 1);
-}
-
-int get_code(char *str, size_t len)
-{
-	if (! ft_strncmp(str, SYMDEF, len))
-		return (1);
-	if (! ft_strncmp(str, SYMDEF_SORTED, len))
-		return (2);
-	if (! ft_strncmp(str, SYMDEF_64, len))
-		return (3);
-	if (! ft_strncmp(str, SYMDEF_64_SORTED, len))
-		return (4);
-	return (-1);
 }
 
 void	add_off(uint32_t off, uint32_t *taboff)
@@ -69,7 +56,7 @@ int		nsymbol(struct ranlib *ar, int acc)
 	return (nsym);
 }
 
-int		rec_arr_hdr(t_info *inf, struct ar_hdr *ar, int acc)
+int		rec_arr(t_info *inf, struct ar_hdr *ar, int acc)
 {
 	t_info	new;
 
@@ -83,16 +70,18 @@ int		rec_arr_hdr(t_info *inf, struct ar_hdr *ar, int acc)
 	ft_putchar('(');
 	ft_putstr((char *)(ar + 1));
 	ft_putendl("):");
-	if (analyse_object(& new))
+	printf("inf->end: %p\n", inf->end);
+	printf("new->end: %p\n", new.end);
+	if (check(inf, new.ptr, 0)) //TODO verif ptr.end
 		return (-1);
-	return rec_arr_hdr(inf, (void *)(ar + 1) + ft_atoi(ar->ar_size), acc - 1);
+	analyse_object(& new);
+	return rec_arr(inf, (void *)(ar + 1) + ft_atoi(ar->ar_size), acc - 1);
 }
 
-int		custom_ar(t_info *inf)
+int		ranlib(t_info *inf)
 {
 	struct ar_hdr	*custom;
 	size_t 			len;
-	int				code;
 	void			*symtab;
 	int				nsyms;
 
@@ -100,15 +89,13 @@ int		custom_ar(t_info *inf)
 		return (1);
 	custom = (struct ar_hdr *)(inf->ptr + SARMAG);
 	len = ft_atoi(custom->ar_name + 3);
-	code = get_code((void *) (custom + 1), len);
 	symtab =  (void *)(custom + 1) + len;
-	nsyms = nsymbol(symtab + 4, (*(int *)symtab / 8));
-	return rec_arr_hdr(inf, (void *)(custom + 1) + ft_atoi(custom->ar_size), nsyms);
-}
-
-int		ranlib(t_info *inf)
-{
-	if (custom_ar(inf))
-		return (1);
-	return (0);
+	if (check(inf, symtab, 4) || check(inf, symtab + 4,
+				(*(int *)symtab / 8) * sizeof(struct ranlib)))
+		return (-1);
+	nsyms = nsymbol(symtab + 4, *(int *)symtab / 8);
+	if (check(inf, (void *)(custom + 1) + ft_atoi(custom->ar_size),
+				nsyms * sizeof(struct ar_hdr)))
+		return (-1);
+	return rec_arr(inf, (void *)(custom + 1) + ft_atoi(custom->ar_size), nsyms);
 }
