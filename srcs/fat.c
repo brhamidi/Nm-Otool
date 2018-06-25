@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/13 18:48:56 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/21 17:48:34 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/25 18:08:34 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ const char            *get_cputype(cpu_type_t cputype)
 		CPU_TYPE_MC680x0,
 		CPU_TYPE_X86,
 		CPU_TYPE_I386,
+		CPU_TYPE_X86_64,
 		CPU_TYPE_MC98000,
 		CPU_TYPE_HPPA,
 		CPU_TYPE_ARM,
