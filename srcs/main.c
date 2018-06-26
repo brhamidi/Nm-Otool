@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 16:30:04 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/26 15:23:41 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/26 16:20:23 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,27 +28,24 @@ int		analyse_object(t_info *inf)
 	unsigned int		magic;
 	int					i;
 	const unsigned int	magic_tab[2] = {
-		MH_MAGIC,
-		MH_MAGIC_64
+		MH_MAGIC, MH_MAGIC_64
 	};
-	int (* const func_tab[2])(t_info *) = {
-		obj,
-		obj64
+	int					(*const func_tab[2])(t_info *) = {
+		obj, obj64
 	};
 	char				*smagic;
 
 	inf->list = NULL;
-	inf->endian = get_endianess(inf);
-	if (inf->endian == -1)
+	if ((inf->endian = get_endianess(inf)) == -1)
 		return (-1);
 	smagic = (char *)inf->ptr;
-	if (! ft_strncmp(smagic, ARMAG, SARMAG))
+	if (!ft_strncmp(smagic, ARMAG, SARMAG))
 		return (ranlib(inf));
 	magic = *(unsigned int *)inf->ptr;
 	i = -1;
 	while (++i < 2)
 		if (magic_tab[i] == rev(magic, 0, 4, inf->endian))
-			return func_tab[i](inf);
+			return (func_tab[i](inf));
 	ft_putendl_fd("The file was not recognized as a valid object file", 2);
 	return (-2);
 }
@@ -58,31 +55,24 @@ int		analyse_file(t_info *inf)
 	unsigned int		magic;
 	int					i;
 	const unsigned int	magic_tab[4] = {
-		FAT_MAGIC,
-		FAT_MAGIC_64,
-		MH_MAGIC,
-		MH_MAGIC_64
+		FAT_MAGIC, FAT_MAGIC_64, MH_MAGIC, MH_MAGIC_64
 	};
-	int (* const func_tab[4])(t_info *) = {
-		obj_fat,
-		obj_fat64,
-		obj,
-		obj64
+	int					(*const func_tab[4])(t_info *) = {
+		obj_fat, obj_fat64, obj, obj64
 	};
 	char				*smagic;
 
 	inf->list = NULL;
-	inf->endian = get_endianess(inf);
-	if (inf->endian == -1)
+	if ((inf->endian = get_endianess(inf)) == -1)
 		return (-1);
 	smagic = (char *)inf->ptr;
-	if (! ft_strncmp(smagic, ARMAG, SARMAG))
+	if (!ft_strncmp(smagic, ARMAG, SARMAG))
 		return (ranlib(inf));
 	magic = *(unsigned int *)inf->ptr;
 	i = -1;
 	while (++i < 4)
 		if (magic_tab[i] == rev(magic, 0, 4, inf->endian))
-			return func_tab[i](inf);
+			return (func_tab[i](inf));
 	ft_putendl_fd("The file was not recognized as a valid object file", 2);
 	return (-2);
 }
@@ -107,7 +97,8 @@ int		map_file(const char *filename)
 		return (2);
 	if (fstat(fd, &buf) == -1)
 		return (3);
-	if ((inf.ptr = mmap(0, buf.st_size, PROT_READ, MAP_PRIVATE, fd, 0)) == MAP_FAILED)
+	if ((inf.ptr = mmap(0, buf.st_size, PROT_READ,
+					MAP_PRIVATE, fd, 0)) == MAP_FAILED)
 		return (4);
 	inf.end = inf.ptr + buf.st_size;
 	inf.mode = CHECK;
@@ -143,12 +134,12 @@ int		main(int ac, char **av)
 	if (ac == 1)
 	{
 		if (map_file("a.out") == 2)
-			return error_file(av[0], "a.out");
+			return (error_file(av[0], "a.out"));
 	}
 	else if (ac == 2)
 	{
 		if (map_file(av[1]) == 2)
-			return error_file(av[0], av[1]);
+			return (error_file(av[0], av[1]));
 	}
 	else
 		return (rec_arg(ac, (const char **)av, 1));

@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/19 15:14:59 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/26 15:37:34 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/26 16:09:47 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,27 @@
 
 void	add_off(uint32_t off, uint32_t *taboff)
 {
-	if (! *taboff)
+	if (!*taboff)
 		*taboff = off;
 	else if (off != *taboff)
-		return add_off(off, taboff + 1);
+		return (add_off(off, taboff + 1));
 }
 
-int		rec_symtab(t_info *inf, struct ranlib *ar, int acc, uint32_t *offset_tab)
+int		rec_symtab(t_info *inf, struct ranlib *ar, int acc, uint32_t *off_tab)
 {
 	if (!acc)
 		return (0);
 	if (check(inf, ar, sizeof(*ar)))
 		return (1);
-	add_off(ar->ran_off, offset_tab);
-	return rec_symtab(inf, ar + 1, acc - 1, offset_tab);
+	add_off(ar->ran_off, off_tab);
+	return (rec_symtab(inf, ar + 1, acc - 1, off_tab));
 }
 
 int		get_noff(uint32_t *tab, size_t len, int acc)
 {
-	if (!len || ! *tab)
+	if (!len || !*tab)
 		return (acc);
-	return get_noff(tab + 1, len - 1, acc + 1);
+	return (get_noff(tab + 1, len - 1, acc + 1));
 }
 
 int		nsymbol(t_info *inf, struct ranlib *ar, int acc)
@@ -71,30 +71,35 @@ int		rec_arr(t_info *inf, struct ar_hdr *ar, int acc)
 	ft_putendl("):");
 	if (check(inf, new.ptr, 0) || check(inf, new.end, 0))
 		return (-1);
-	analyse_object(& new);
-	return rec_arr(inf, (void *)(ar + 1) + ft_atoi(ar->ar_size), acc - 1);
+	analyse_object(&new);
+	return (rec_arr(inf, (void *)(ar + 1) + ft_atoi(ar->ar_size), acc - 1));
 }
+
+/*
+**	must secure ft_atoi
+*/
 
 int		ranlib(t_info *inf)
 {
 	struct ar_hdr	*custom;
-	size_t 			len;
+	size_t			len;
 	void			*symtab;
 	int				nsyms;
 
 	if (check(inf, inf->ptr + SARMAG, sizeof(struct ar_hdr)))
 		return (1);
 	custom = (struct ar_hdr *)(inf->ptr + SARMAG);
-	len = ft_atoi(custom->ar_name + 3); //TODO verif atoi
-	symtab =  (void *)(custom + 1) + len;
+	len = ft_atoi(custom->ar_name + 3);
+	symtab = (void *)(custom + 1) + len;
 	if (check(inf, symtab, 4) || check(inf, symtab + 4,
 				(*(int *)symtab / 8) * sizeof(struct ranlib)))
 		return (-1);
 	nsyms = nsymbol(inf, symtab + 4, *(int *)symtab / 8);
 	if (nsyms == -1)
-		return 1;
+		return (1);
 	if (check(inf, (void *)(custom + 1) + ft_atoi(custom->ar_size),
 				nsyms * sizeof(struct ar_hdr)))
 		return (-1);
-	return rec_arr(inf, (void *)(custom + 1) + ft_atoi(custom->ar_size), nsyms);
+	return (rec_arr(inf, (void *)(custom + 1) +
+				ft_atoi(custom->ar_size), nsyms));
 }

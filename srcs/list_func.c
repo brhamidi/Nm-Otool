@@ -6,13 +6,13 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/04 18:24:50 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/21 17:09:37 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/26 16:15:30 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_nm.h"
 
-t_sym *create_node(void *elem)
+t_sym	*create_node(void *elem)
 {
 	t_sym	*node;
 
@@ -36,12 +36,16 @@ int		predicat64(t_sym *a, t_sym *b, const char *strtable, t_info *inf)
 {
 	const struct nlist_64	*a_nlist = (struct nlist_64 *)a->sym;
 	const struct nlist_64	*b_nlist = (struct nlist_64 *)b->sym;
-	const uint32_t			an_strx = rev(a_nlist->n_un.n_strx, 0, sizeof(uint32_t), inf->endian);
-	const uint32_t			bn_strx = rev(b_nlist->n_un.n_strx, 0, sizeof(uint32_t), inf->endian);
+	uint32_t				an_strx;
+	uint32_t				bn_strx;
 
-	if (check(inf, (void*)strtable + an_strx, 1) || check(inf, (void*)strtable + bn_strx, 1))
+	an_strx = rev(a_nlist->n_un.n_strx, 0, sizeof(uint32_t), inf->endian);
+	bn_strx = rev(b_nlist->n_un.n_strx, 0, sizeof(uint32_t), inf->endian);
+	if (check(inf, (void*)strtable + an_strx, 1)
+			|| check(inf, (void*)strtable + bn_strx, 1))
 		return (-1);
-	if (str_safe(inf, (void *)strtable + an_strx) || str_safe(inf, (void *)strtable + bn_strx))
+	if (str_safe(inf, (void *)strtable + an_strx)
+			|| str_safe(inf, (void *)strtable + bn_strx))
 		return (-1);
 	return (ft_strcmp(strtable + an_strx, strtable + bn_strx) > 0 ? 1 : 0);
 }

@@ -6,22 +6,22 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/14 15:42:54 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/25 20:27:43 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/26 16:30:36 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_nm.h"
 
-int	 str_safe(t_info * inf, const void *str)
+int			str_safe(t_info *inf, const void *str)
 {
 	if (check(inf, str, 1))
 		return (1);
-	if (! *(const char *)str)
+	if (!*(const char *)str)
 		return (0);
 	return (str_safe(inf, str + 1));
 }
 
-void	put_value(const uint64_t n, int padd)
+void		put_value(const uint64_t n, int padd)
 {
 	const unsigned int len = ft_nbytes(n, 16);
 
