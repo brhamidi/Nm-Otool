@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/13 18:48:56 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/25 18:08:34 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/26 15:25:16 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ int obj_fat(t_info *inf)
 			inf->mode = SINGLE;
 		new.ptr = inf->ptr + rev(farch[i].offset, 0, sizeof(uint32_t), inf->endian);
 		new.end = new.ptr + rev(farch[i].size, 0, sizeof(uint32_t), inf->endian);
+		new.file_name = inf->file_name;
 		if (check(inf, new.ptr, 0) || check(inf, new.end, 0))
 			return (-1);
 		if (inf->mode == SINGLE && rev(farch[i].cputype, 0, sizeof(cpu_type_t), inf->endian) == CPU_TYPE_X86_64)
