@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 16:30:04 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/26 16:20:23 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/26 19:54:28 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,14 +133,9 @@ int		main(int ac, char **av)
 {
 	if (ac == 1)
 	{
-		if (map_file("a.out") == 2)
-			return (error_file(av[0], "a.out"));
+		ft_putstr_fd(av[0], 2);
+		ft_putendl_fd(": <objects file> ...", 2);
+		return (1);
 	}
-	else if (ac == 2)
-	{
-		if (map_file(av[1]) == 2)
-			return (error_file(av[0], av[1]));
-	}
-	else
-		return (rec_arg(ac, (const char **)av, 1));
+	return (rec_arg(ac, (const char **)av, 1));
 }
