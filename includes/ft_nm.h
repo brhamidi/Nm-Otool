@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 16:31:03 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/25 15:50:01 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/26 17:39:33 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,52 +30,54 @@
 typedef struct s_sym	t_sym;
 typedef struct s_info	t_info;
 
-typedef enum e_mode {
+typedef enum	e_mode
+{
 	CHECK,
 	SINGLE,
 	FULL
-}			t_mode;
+}				t_mode;
 
-
-typedef enum e_arch {
+typedef enum	e_arch
+{
 	I386,
 	X86_64,
 	PPC,
 	PPC64
-}			t_arch;
+}				t_arch;
 
-struct s_info
+struct			s_info
 {
-	void		*ptr;
-	const char	*file_name;
-	void		*end;
-	int			endian;
-	t_arch		arch;
-	t_sym		*list;
-	t_mode		mode;
+	void			*ptr;
+	const char		*file_name;
+	void			*end;
+	int				endian;
+	t_arch			arch;
+	t_sym			*list;
+	t_mode			mode;
 };
 
-struct	s_sym
+struct			s_sym
 {
 	void			*sym;
 	struct s_sym	*next;
 };
 
-int	 		str_safe(t_info * inf, const void *str);
-int			analyse_file(t_info *inf);
-int			analyse_object(t_info *inf);
-void		put_value(const uint64_t n, int padd);
-int			check(t_info *inf, const void *addr, size_t size);
-uint64_t	rev(uint64_t x, uint64_t r, size_t size, int little);
-int 		obj_fat(t_info *inf);
-int 		obj_fat64(t_info *inf);
-int 		obj(t_info *inf);
-int			ranlib(t_info *inf);
-int			obj64(t_info *inf);
-int			free_list(t_sym *head);
-int			push_front(t_sym **head, void *e);
-int			basic_sort(t_sym *list, const char *strtable,
+int					str_safe(t_info *inf, const void *str);
+int					analyse_file(t_info *inf);
+int					analyse_object(t_info *inf);
+void				put_value(const uint64_t n, int padd);
+int					check(t_info *inf, const void *addr, size_t size);
+uint64_t			rev(uint64_t x, uint64_t r, size_t size, int little);
+int					obj_fat(t_info *inf);
+int					obj_fat64(t_info *inf);
+int					obj(t_info *inf);
+int					ranlib(t_info *inf);
+int					obj64(t_info *inf);
+int					free_list(t_sym *head);
+int					push_front(t_sym **head, void *e);
+int					basic_sort(t_sym *list, const char *strtable,
 		int (*f)(t_sym*, t_sym*, const char *, t_info *), t_info *inf);
-int			predicat64(t_sym *a, t_sym *b, const char *strtable, t_info *inf);
+int					predicat64(t_sym *a, t_sym *b,
+		const char *strtable, t_info *inf);
 
 #endif

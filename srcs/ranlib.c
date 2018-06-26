@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/19 15:14:59 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/26 16:09:47 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/26 17:27:36 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,11 @@ int		rec_arr(t_info *inf, struct ar_hdr *ar, int acc)
 		return (0);
 	if (check(inf, ar, sizeof(*ar)))
 		return (1);
-	if (check(inf, ar, sizeof(*ar) + ft_atoi(ar->ar_name + 3)))
+	if (check(inf, ar, sizeof(*ar) + ft_natoui(ar->ar_name + 3, 13)))
 		return (1);
 	ft_putchar('\n');
-	new.ptr = (void *)(ar + 1) + ft_atoi(ar->ar_name + 3);
-	new.end = (void *)(ar + 1) + ft_atoi(ar->ar_size);
+	new.ptr = (void *)(ar + 1) + ft_natoui(ar->ar_name + 3, 13);
+	new.end = (void *)(ar + 1) + ft_natoui(ar->ar_size, 10);
 	new.file_name = (char *)ar + 1;
 	ft_putstr(inf->file_name);
 	ft_putchar('(');
@@ -72,12 +72,9 @@ int		rec_arr(t_info *inf, struct ar_hdr *ar, int acc)
 	if (check(inf, new.ptr, 0) || check(inf, new.end, 0))
 		return (-1);
 	analyse_object(&new);
-	return (rec_arr(inf, (void *)(ar + 1) + ft_atoi(ar->ar_size), acc - 1));
+	return (rec_arr(inf, (void *)(ar + 1) +
+				ft_natoui(ar->ar_size, 10), acc - 1));
 }
-
-/*
-**	must secure ft_atoi
-*/
 
 int		ranlib(t_info *inf)
 {
@@ -89,7 +86,7 @@ int		ranlib(t_info *inf)
 	if (check(inf, inf->ptr + SARMAG, sizeof(struct ar_hdr)))
 		return (1);
 	custom = (struct ar_hdr *)(inf->ptr + SARMAG);
-	len = ft_atoi(custom->ar_name + 3);
+	len = ft_natoui(custom->ar_name + 3, 13);
 	symtab = (void *)(custom + 1) + len;
 	if (check(inf, symtab, 4) || check(inf, symtab + 4,
 				(*(int *)symtab / 8) * sizeof(struct ranlib)))
@@ -97,9 +94,9 @@ int		ranlib(t_info *inf)
 	nsyms = nsymbol(inf, symtab + 4, *(int *)symtab / 8);
 	if (nsyms == -1)
 		return (1);
-	if (check(inf, (void *)(custom + 1) + ft_atoi(custom->ar_size),
+	if (check(inf, (void *)(custom + 1) + ft_natoui(custom->ar_size, 10),
 				nsyms * sizeof(struct ar_hdr)))
 		return (-1);
 	return (rec_arr(inf, (void *)(custom + 1) +
-				ft_atoi(custom->ar_size), nsyms));
+				ft_natoui(custom->ar_size, 10), nsyms));
 }

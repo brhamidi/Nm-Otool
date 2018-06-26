@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/04 11:18:26 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/17 15:19:49 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/26 17:34:38 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,9 @@
 
 void				ft_putulongnbr(unsigned long int nb, unsigned int base);
 void				ft_putnchar(char c, int n);
-unsigned int 		ft_nbytes(const unsigned long int n, int base);
+unsigned int		ft_nbytes(const unsigned long int n, int base);
 int					ft_atoi(const char *str);
+size_t				ft_natoui(const char *str, size_t n);
 char				*ft_strrev(char *src);
 void				ft_putnbr(int nb);
 void				ft_putnbr_fd(int nb, int fd);

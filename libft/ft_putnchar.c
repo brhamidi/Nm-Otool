@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/02 19:10:26 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/02 19:15:57 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/26 17:31:55 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static void	rec_putnchar(char c, int n, int acc)
 {
 	if (acc == n)
-		return;
+		return ;
 	ft_putchar(c);
 	rec_putnchar(c, n, acc + 1);
 }

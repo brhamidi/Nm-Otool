@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/04 11:17:05 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/05/20 17:50:14 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/26 17:32:45 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,5 @@
 
 size_t	ft_strlen(const char *str)
 {
-	return ( ! *str ? 0  : 1 + ft_strlen(str + 1) );
+	return (!*str ? 0 : 1 + ft_strlen(str + 1));
 }
