@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/27 15:20:10 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/27 17:27:48 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/27 18:07:20 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,9 +107,9 @@ char	get_segment(t_info *inf, uint8_t ordinal, int mode)
 				: segment_match32(inf, lc, &acc, ordinal);
 		if (c)
 			return (c);
-		if (check(inf, lc + rev(lc->cmdsize, 0, sizeof(uint32_t), inf->endian),
+		if (check(inf, (void*)lc + rev(lc->cmdsize, 0, sizeof(uint32_t), inf->endian),
 					sizeof(*lc)))
-			return (1);
+			return (0);
 		lc = (void *)lc + rev(lc->cmdsize, 0, sizeof(uint32_t), inf->endian);
 	}
 	return ('S');
@@ -129,7 +129,7 @@ char	get_sign_char(t_info *inf, const struct nlist *nlist, int mode)
 	}
 	if ((nlist->n_type & N_TYPE) == N_SECT)
 		return get_segment(inf, nlist->n_sect, mode);
-	return ('?');
+	return ('S');
 }
 
 char	get_sign(t_info *inf, const struct nlist *nlist, int mode)
