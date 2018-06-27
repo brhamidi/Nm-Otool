@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 16:31:03 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/26 17:39:33 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/27 13:40:36 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ struct			s_info
 	t_arch			arch;
 	t_sym			*list;
 	t_mode			mode;
+	void			*lc;
+	uint32_t		ncmds;
 };
 
 struct			s_sym
