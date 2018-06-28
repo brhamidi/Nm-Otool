@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/19 15:14:59 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/28 15:01:35 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/28 20:25:26 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ int		rec_arr(t_info *inf, struct ar_hdr *ar, int acc)
 		return (1);
 	if (check(inf, ar, sizeof(*ar) + ft_natoui(ar->ar_name + 3, 13)))
 		return (1);
-	ft_putchar('\n');
 	new.ptr = (void *)(ar + 1) + ft_natoui(ar->ar_name + 3, 13);
 	new.end = (void *)(ar + 1) + ft_natoui(ar->ar_size, 10);
 	new.file_name = (char *)ar + 1;

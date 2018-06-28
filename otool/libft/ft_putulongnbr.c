@@ -6,13 +6,13 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/26 17:33:22 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/28 16:41:53 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/28 18:52:12 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putulongnbr(unsigned long int nb, unsigned int base)
+void	ft_putulongnbr(unsigned long long int nb, unsigned int base)
 {
 	const char tab[16] = {
 		'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',

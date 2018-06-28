@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/13 18:49:21 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/28 18:23:32 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/28 20:18:46 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,9 @@ void		put_value(const unsigned long int n, int padd)
 	ft_putchar('\t');
 }
 
-int		print_text_section(t_info *inf, void *curr, uint64_t size, uint64_t acc)
+int		print_text_section(t_info *inf, void *curr, uint64_t size, uint64_t acc, uint64_t value)
 {
-	unsigned char 		c;
-	unsigned long int	addr;
+	unsigned char 	c;
 
 	if (acc > size)
 	{
@@ -34,9 +33,8 @@ int		print_text_section(t_info *inf, void *curr, uint64_t size, uint64_t acc)
 	if (check(inf, curr, 0))
 		return (-1);
 	c = *(unsigned char*)curr;
-	addr = (unsigned long int)(curr - inf->ptr);
 	if (acc == 1)
-		put_value(addr, inf->arch == I386 ? 8 : 16);
+		put_value(value + acc - 1, inf->arch == I386 ? 8 : 16);
 	if (ft_nbytes(c, 16) == 1)
 		ft_putchar('0');
 	ft_putulongnbr(c, 16);
@@ -45,9 +43,9 @@ int		print_text_section(t_info *inf, void *curr, uint64_t size, uint64_t acc)
 	{
 		ft_putchar('\n');
 		if (acc + 1 <= size)
-			put_value(addr + 1, inf->arch == I386 ? 8 : 16);
+			put_value(value + acc, inf->arch == I386 ? 8 : 16);
 	}
-	return (print_text_section(inf, curr + 1, size, acc + 1));
+	return (print_text_section(inf, curr + 1, size, acc + 1, value));
 }
 
 int		loop_sect64(t_info *inf, void *curr, uint32_t nsects)
@@ -64,8 +62,8 @@ int		loop_sect64(t_info *inf, void *curr, uint32_t nsects)
 	{
 		ft_putendl("Contents of (__TEXT,__text) section");
 		return (print_text_section(inf, inf->ptr + rev(sect->offset, 0,
-					sizeof(uint32_t), inf->endian), 
-				rev(sect->size, 0, sizeof(uint64_t), inf->endian), 1));
+					sizeof(uint64_t), inf->endian), rev(sect->size, 0, sizeof(uint64_t), inf->endian), 1
+					,rev(sect->addr, 0, sizeof(uint64_t), inf->endian)));
 	}
 	return (loop_sect64(inf, sect + 1, nsects - 1));
 }
@@ -99,7 +97,8 @@ int		loop_sect(t_info *inf, void *curr, uint32_t nsects)
 		ft_putendl("Contents of (__TEXT,__text) section");
 		return (print_text_section(inf, inf->ptr + rev(sect->offset, 0,
 					sizeof(uint32_t), inf->endian), 
-				rev(sect->size, 0, sizeof(uint32_t), inf->endian), 1));
+				rev(sect->size, 0, sizeof(uint32_t), inf->endian), 1
+				,rev(sect->addr, 0, sizeof(uint64_t), inf->endian)));
 	}
 	return (loop_sect(inf, sect + 1, nsects - 1));
 }
