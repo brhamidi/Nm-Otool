@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 16:31:03 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/27 13:40:36 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/28 12:20:15 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ struct			s_sym
 	struct s_sym	*next;
 };
 
+char				get_sign(t_info *inf, const struct nlist *nlist, int mode);
 int					str_safe(t_info *inf, const void *str);
 int					analyse_file(t_info *inf);
 int					analyse_object(t_info *inf);
