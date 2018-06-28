@@ -6,11 +6,11 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 16:30:04 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/26 19:54:28 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/28 17:41:24 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_nm.h"
+#include "ft_otool.h"
 
 int		get_endianess(t_info *inf)
 {
@@ -118,7 +118,6 @@ int		rec_arg(const int ac, const char **av, const int acc)
 	code = 0;
 	if (acc == ac)
 		return (0);
-	ft_putchar('\n');
 	ft_putstr(av[acc]);
 	ft_putstr(":\n");
 	code = map_file(av[acc]);

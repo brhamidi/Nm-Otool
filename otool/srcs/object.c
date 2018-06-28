@@ -6,144 +6,135 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/13 18:49:21 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/26 16:29:12 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/28 18:23:32 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_nm.h"
+#include "ft_otool.h"
 
-char	get_sign(const struct nlist *nlist)
+void		put_value(const unsigned long int n, int padd)
 {
-	(void)nlist;
-	return ('?');
+	const unsigned int len = ft_nbytes(n, 16);
+
+	ft_putnchar('0', padd - len);
+	ft_putulongnbr(n, 16);
+	ft_putchar('\t');
 }
 
-void	display_info64(const t_sym *node, t_info *inf, const char *strtable)
+int		print_text_section(t_info *inf, void *curr, uint64_t size, uint64_t acc)
 {
-	struct nlist_64	*list;
-	uint8_t			type;
+	unsigned char 		c;
+	unsigned long int	addr;
 
-	if (!node)
-		return ;
-	if (check(inf, node->sym, sizeof(*list)))
-		return ;
-	list = (struct nlist_64 *)node->sym;
-	type = rev(list->n_type, 0, 1, inf->endian);
-	if (type & N_STAB)
-		return (display_info64(node->next, inf, strtable));
-	if ((type & N_TYPE) == N_UNDF)
-		ft_putnchar(' ', 16);
-	else
-		put_value(rev(list->n_value, 0, sizeof(uint64_t), inf->endian), 16);
-	ft_putchar(' ');
-	ft_putchar(get_sign((const struct nlist*)list));
-	ft_putchar(' ');
-	if (str_safe(inf, strtable + rev(list->n_un.n_strx, 0,
-					sizeof(uint32_t), inf->endian)))
-		return ;
-	ft_putendl(strtable + rev(list->n_un.n_strx, 0,
-				sizeof(uint32_t), inf->endian));
-	return (display_info64(node->next, inf, strtable));
-}
-
-void	display_info(const t_sym *node, t_info *inf, const char *strtable)
-{
-	struct nlist	*list;
-	uint8_t			type;
-
-	if (!node)
-		return ;
-	if (check(inf, node->sym, sizeof(*list)))
-		return ;
-	list = (struct nlist *)node->sym;
-	type = rev(list->n_type, 0, 1, inf->endian);
-	if (type & N_STAB)
-		return (display_info64(node->next, inf, strtable));
-	if ((type & N_TYPE) == N_UNDF)
-		ft_putnchar(' ', 8);
-	else
-		put_value(rev(list->n_value, 0, sizeof(uint32_t), inf->endian), 8);
-	ft_putchar(' ');
-	ft_putchar(get_sign(list));
-	ft_putchar(' ');
-	if (str_safe(inf, strtable + rev(list->n_un.n_strx, 0,
-					sizeof(uint32_t), inf->endian)))
-		return ;
-	ft_putendl(strtable + rev(list->n_un.n_strx, 0,
-				sizeof(uint32_t), inf->endian));
-	return (display_info(node->next, inf, strtable));
-}
-
-int		ft_nlist(t_info *inf, struct nlist *nlist,
-		uint32_t nsyms, uint32_t stroff)
-{
-	if (!nsyms)
+	if (acc > size)
 	{
-		if (basic_sort(inf->list, inf->ptr + stroff, predicat64, inf) == -1)
-			return (free_list(inf->list) + 1);
-		display_info(inf->list, inf, inf->ptr + stroff);
-		return (free_list(inf->list));
+		ft_putchar('\n');
+		return (0);
 	}
-	if (check(inf, nlist, sizeof(*nlist)))
+	if (check(inf, curr, 0))
 		return (-1);
-	push_front(&inf->list, nlist);
-	return (ft_nlist(inf, nlist + 1, nsyms - 1, stroff));
-}
-
-int		ft_nlist64(t_info *inf, struct nlist_64 *nlist,
-		uint32_t nsyms, uint32_t stroff)
-{
-	if (!nsyms)
+	c = *(unsigned char*)curr;
+	addr = (unsigned long int)(curr - inf->ptr);
+	if (acc == 1)
+		put_value(addr, inf->arch == I386 ? 8 : 16);
+	if (ft_nbytes(c, 16) == 1)
+		ft_putchar('0');
+	ft_putulongnbr(c, 16);
+	ft_putchar(' ');
+	if ((acc % 16 == 0) && acc + 1 <= size)
 	{
-		if (basic_sort(inf->list, inf->ptr + stroff, predicat64, inf) == -1)
-			return (free_list(inf->list) + 1);
-		display_info64(inf->list, inf, inf->ptr + stroff);
-		return (free_list(inf->list));
+		ft_putchar('\n');
+		if (acc + 1 <= size)
+			put_value(addr + 1, inf->arch == I386 ? 8 : 16);
 	}
-	if (check(inf, nlist, sizeof(*nlist)))
-		return (-1);
-	push_front(&inf->list, nlist);
-	return (ft_nlist64(inf, nlist + 1, nsyms - 1, stroff));
+	return (print_text_section(inf, curr + 1, size, acc + 1));
 }
 
-/*
-**	tab: offset array: index --> 0: symoff 1: stroff
-*/
-
-int		symtab(t_info *inf, void *curr)
+int		loop_sect64(t_info *inf, void *curr, uint32_t nsects)
 {
-	struct symtab_command	*sym;
-	uint32_t				offarr[2];
-	uint32_t				nsyms;
-	const size_t			size_nlist = sizeof(struct nlist);
-	const size_t			size_nlist64 = sizeof(struct nlist_64);
+	struct section_64	*sect;
 
-	if (check(inf, curr, sizeof(*sym)))
+	if (!nsects)
+		return (1);
+	if (check(inf, curr, sizeof(*sect)))
 		return (-1);
-	sym = (struct symtab_command*)curr;
-	offarr[0] = rev(sym->symoff, 0, sizeof(uint32_t), inf->endian);
-	offarr[1] = rev(sym->stroff, 0, sizeof(uint32_t), inf->endian);
-	nsyms = rev(sym->nsyms, 0, sizeof(uint32_t), inf->endian);
-	if (check(inf, inf->ptr + offarr[0],
-				inf->arch == I386 ? size_nlist : size_nlist64))
-		return (-1);
-	if (inf->arch == I386)
-		return (ft_nlist(inf, inf->ptr + offarr[0], nsyms, offarr[1]));
-	else
-		return (ft_nlist64(inf, inf->ptr + offarr[0], nsyms, offarr[1]));
+	sect = (struct section_64*)curr;
+	if (!ft_strcmp(sect->sectname, SECT_TEXT)
+			&& !ft_strcmp(sect->segname, SEG_TEXT))
+	{
+		ft_putendl("Contents of (__TEXT,__text) section");
+		return (print_text_section(inf, inf->ptr + rev(sect->offset, 0,
+					sizeof(uint32_t), inf->endian), 
+				rev(sect->size, 0, sizeof(uint64_t), inf->endian), 1));
+	}
+	return (loop_sect64(inf, sect + 1, nsects - 1));
 }
 
+int		section64_mach(t_info *inf, void *curr)
+{
+	struct segment_command_64	*seg;
+	uint32_t					nsects;
+
+	if (check(inf, curr, sizeof(*seg)))
+		return (-1);
+	seg = (struct segment_command_64*)curr;
+	nsects = rev(seg->nsects, 0, sizeof(uint32_t), inf->endian);
+	if (nsects > 0)
+		return (loop_sect64(inf, seg + 1, nsects));
+	return (1);
+}
+
+int		loop_sect(t_info *inf, void *curr, uint32_t nsects)
+{
+	struct section	*sect;
+
+	if (!nsects)
+		return (1);
+	if (check(inf, curr, sizeof(*sect)))
+		return (-1);
+	sect = (struct section*)curr;
+	if (!ft_strcmp(sect->sectname, SECT_TEXT)
+			&& !ft_strcmp(sect->segname, SEG_TEXT))
+	{
+		ft_putendl("Contents of (__TEXT,__text) section");
+		return (print_text_section(inf, inf->ptr + rev(sect->offset, 0,
+					sizeof(uint32_t), inf->endian), 
+				rev(sect->size, 0, sizeof(uint32_t), inf->endian), 1));
+	}
+	return (loop_sect(inf, sect + 1, nsects - 1));
+}
+
+int		section_mach(t_info *inf, void *curr)
+{
+	struct segment_command	*seg;
+	uint32_t				nsects;
+
+	if (check(inf, curr, sizeof(*seg)))
+		return (-1);
+	seg = (struct segment_command*)curr;
+	nsects = rev(seg->nsects, 0, sizeof(uint32_t), inf->endian);
+	if (nsects > 0)
+		return (loop_sect(inf, seg + 1, nsects));
+	return (1);
+}
 int		load(t_info *inf, void *curr, size_t ncmds, size_t acc)
 {
 	struct load_command	*lc;
+	int					code;
 
 	if (acc == rev(ncmds, 0, sizeof(size_t), inf->endian))
 		return (-1);
 	if (check(inf, curr, sizeof(*lc)))
 		return (-1);
 	lc = (struct load_command *)curr;
-	if (rev(lc->cmd, 0, sizeof(uint32_t), inf->endian) == LC_SYMTAB)
-		return (symtab(inf, curr));
+	if (rev(lc->cmd, 0, sizeof(uint32_t), inf->endian) == LC_SEGMENT_64
+			|| rev(lc->cmd, 0, sizeof(uint32_t), inf->endian) == LC_SEGMENT)
+	{
+		code = inf->arch == I386 ?
+			section_mach(inf, curr) : section64_mach(inf, curr);
+		if (code == 0)
+			return (0);
+	}
 	return (load(inf, curr + rev(lc->cmdsize, 0,
 					sizeof(uint32_t), inf->endian), ncmds, acc + 1));
 }

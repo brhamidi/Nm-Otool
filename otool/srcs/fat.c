@@ -6,11 +6,11 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/13 18:48:56 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/26 16:55:37 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/28 15:01:25 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_nm.h"
+#include "ft_otool.h"
 
 const cpu_type_t	g_cpu_tab[] = {
 	CPU_TYPE_VAX,

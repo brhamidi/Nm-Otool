@@ -6,7 +6,7 @@
 #    By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/05/20 19:05:42 by bhamidi           #+#    #+#              #
-#    Updated: 2018/06/26 19:03:12 by bhamidi          ###   ########.fr        #
+#    Updated: 2018/06/28 17:55:36 by bhamidi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,9 +22,9 @@ LIBPATH = libft/
 SRC_PATH		= srcs/
 INCLUDE_PATH	= includes/
 
-OBJ		= main.o list_func.o object.o fat.o utility.o ranlib.o
+OBJ		= main.o object.o fat.o utility.o ranlib.o
 
-INCLUDE	= ft_nm.h
+INCLUDE	= ft_otool.h
 
 OBJS=$(addprefix $(SRC_PATH), $(OBJ))
 INCLUDES=$(addprefix $(INCLUDE_PATH), $(INCLUDE))

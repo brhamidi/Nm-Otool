@@ -6,11 +6,11 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/19 15:14:59 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/26 17:27:36 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/28 15:01:35 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_nm.h"
+#include "ft_otool.h"
 
 void	add_off(uint32_t off, uint32_t *taboff)
 {

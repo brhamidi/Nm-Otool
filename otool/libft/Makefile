@@ -6,13 +6,13 @@
 #    By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/02/11 15:09:11 by bhamidi           #+#    #+#              #
-#    Updated: 2018/06/02 19:18:07 by bhamidi          ###   ########.fr        #
+#    Updated: 2018/06/28 17:59:17 by bhamidi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC 		= gcc
 NAME	= libft.a
-CFLAGS 	= -Wall -Wextra -Werror
+CFLAGS 	= -Wall -Wextra -Werror -O2
 SRCS 	= ft_isalnum.c\
 		ft_isalpha.c\
 		ft_nbytes.c\
