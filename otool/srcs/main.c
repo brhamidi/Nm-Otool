@@ -6,72 +6,24 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 16:30:04 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/29 17:07:09 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/29 21:04:24 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_otool.h"
 
-int		get_endianess(t_info *inf)
-{
-	unsigned int	m;
+const unsigned int	g_magic_tab[4] = {
+	FAT_MAGIC, FAT_MAGIC_64, MH_MAGIC, MH_MAGIC_64
+};
 
-	if (check(inf, inf->ptr, 8))
-		return (-1);
-	m = *(unsigned int *)inf->ptr;
-	return (m == FAT_CIGAM || m == FAT_CIGAM_64
-			|| m == MH_CIGAM_64 || m == MH_CIGAM) ? 1 : 0;
-}
-
-int		analyse_object(t_info *inf)
-{
-	unsigned int		magic;
-	int					i;
-	const unsigned int	magic_tab[2] = {
-		MH_MAGIC, MH_MAGIC_64
-	};
-	int					(*const func_tab[2])(t_info *) = {
-		obj, obj64
-	};
-	char				*smagic;
-
-	inf->list = NULL;
-	if ((inf->endian = get_endianess(inf)) == -1)
-		return (-1);
-	smagic = (char *)inf->ptr;
-	if (!ft_strncmp(smagic, ARMAG, SARMAG))
-		return (ranlib(inf));
-	magic = *(unsigned int *)inf->ptr;
-	i = -1;
-	while (++i < 2)
-		if (magic_tab[i] == rev(magic, 0, 4, inf->endian))
-			return (func_tab[i](inf));
-	ft_putendl_fd("The file was not recognized as a valid object file", 2);
-	return (-2);
-}
-
-void	print_archive(const char *file_name)
-{
-	ft_putstr("Archive : ");
-	ft_putendl(file_name);
-}
-
-void	print_name(const char *file_name)
-{
-	ft_putstr(file_name);
-	ft_putendl(":");
-}
+int					(*const g_func_tab[4])(t_info *) = {
+	obj_fat, obj_fat64, obj, obj64
+};
 
 int		analyse_file(t_info *inf)
 {
 	unsigned int		magic;
 	int					i;
-	const unsigned int	magic_tab[4] = {
-		FAT_MAGIC, FAT_MAGIC_64, MH_MAGIC, MH_MAGIC_64
-	};
-	int					(*const func_tab[4])(t_info *) = {
-		obj_fat, obj_fat64, obj, obj64
-	};
 	char				*smagic;
 
 	inf->list = NULL;
@@ -86,11 +38,12 @@ int		analyse_file(t_info *inf)
 	magic = *(unsigned int *)inf->ptr;
 	i = -1;
 	while (++i < 4)
-		if (magic_tab[i] == rev(magic, 0, 4, inf->endian))
+		if (g_magic_tab[i] == rev(magic, 0, 4, inf->endian))
 		{
-			if (!(magic_tab[i] == FAT_MAGIC || magic_tab[i] == FAT_MAGIC_64))
+			if (!(g_magic_tab[i] == FAT_MAGIC
+						|| g_magic_tab[i] == FAT_MAGIC_64))
 				print_name(inf->file_name);
-			return (func_tab[i](inf));
+			return (g_func_tab[i](inf));
 		}
 	ft_putendl_fd("The file was not recognized as a valid object file", 2);
 	return (-2);

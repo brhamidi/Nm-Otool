@@ -6,19 +6,30 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/14 15:42:54 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/28 15:05:59 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/29 21:03:24 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_otool.h"
 
-int			str_safe(t_info *inf, const void *str)
+void		print_archive(const char *file_name)
 {
-	if (check(inf, str, 1))
-		return (1);
-	if (!*(const char *)str)
-		return (0);
-	return (str_safe(inf, str + 1));
+	ft_putstr("Archive : ");
+	ft_putendl(file_name);
+}
+
+void		print_name(const char *file_name)
+{
+	ft_putstr(file_name);
+	ft_putendl(":");
+}
+
+void		add_off(uint32_t off, uint32_t *taboff)
+{
+	if (!*taboff)
+		*taboff = off;
+	else if (off != *taboff)
+		return (add_off(off, taboff + 1));
 }
 
 int			check(t_info *inf, const void *addr, size_t size)
