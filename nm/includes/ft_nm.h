@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 16:31:03 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/28 12:20:15 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/29 20:09:02 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,22 +30,22 @@
 typedef struct s_sym	t_sym;
 typedef struct s_info	t_info;
 
-typedef enum	e_mode
+typedef enum		e_mode
 {
 	CHECK,
 	SINGLE,
 	FULL
-}				t_mode;
+}					t_mode;
 
-typedef enum	e_arch
+typedef enum		e_arch
 {
 	I386,
 	X86_64,
 	PPC,
 	PPC64
-}				t_arch;
+}					t_arch;
 
-struct			s_info
+struct				s_info
 {
 	void			*ptr;
 	const char		*file_name;
@@ -58,12 +58,28 @@ struct			s_info
 	uint32_t		ncmds;
 };
 
-struct			s_sym
+struct				s_sym
 {
 	void			*sym;
 	struct s_sym	*next;
 };
 
+int					ft_nlist(t_info *inf, struct nlist *nlist,
+		uint32_t nsyms, uint32_t stroff);
+void				display_info(const t_sym *node, t_info *inf,
+		const char *strtable);
+void				display_info64(const t_sym *node, t_info *inf,
+		const char *strtable);
+void				add_off(uint32_t off, uint32_t *taboff);
+char				get_segment(t_info *inf, uint8_t ordinal, int mode);
+char				get_sign_char(t_info *inf,
+		const struct nlist *nlist, int mode);
+int					error_file(const char *prog_name, const char *file_name);
+int					get_endianess(t_info *inf);
+int					help_ft64(t_info *inf, t_info *new,
+		struct fat_arch_64 *farch, unsigned int i);
+int					help_end(t_info *inf);
+int					help_end64(t_info *inf);
 char				get_sign(t_info *inf, const struct nlist *nlist, int mode);
 int					str_safe(t_info *inf, const void *str);
 int					analyse_file(t_info *inf);

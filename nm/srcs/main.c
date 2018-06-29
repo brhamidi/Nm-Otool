@@ -6,22 +6,11 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 16:30:04 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/26 16:20:23 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/29 20:03:06 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_nm.h"
-
-int		get_endianess(t_info *inf)
-{
-	unsigned int	m;
-
-	if (check(inf, inf->ptr, 8))
-		return (-1);
-	m = *(unsigned int *)inf->ptr;
-	return (m == FAT_CIGAM || m == FAT_CIGAM_64
-			|| m == MH_CIGAM_64 || m == MH_CIGAM) ? 1 : 0;
-}
 
 int		analyse_object(t_info *inf)
 {
@@ -75,15 +64,6 @@ int		analyse_file(t_info *inf)
 			return (func_tab[i](inf));
 	ft_putendl_fd("The file was not recognized as a valid object file", 2);
 	return (-2);
-}
-
-int		error_file(const char *prog_name, const char *file_name)
-{
-	ft_putstr_fd(prog_name, 2);
-	ft_putstr_fd(": ", 2);
-	ft_putstr_fd(file_name, 2);
-	ft_putendl_fd(": No such file or directory.", 2);
-	return (1);
 }
 
 int		map_file(const char *filename)

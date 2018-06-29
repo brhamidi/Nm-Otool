@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/13 18:48:56 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/29 15:58:56 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/29 19:59:04 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,52 +67,81 @@ void		handle_full(const char *filename,
 	analyse_object(new);
 }
 
+int			help_ft(t_info *inf, t_info *new,
+		struct fat_arch *farch, unsigned int i)
+{
+	if (check(inf, farch + i, sizeof(*farch)))
+		return (-1);
+	if (rev(farch[i].cputype, 0,
+				sizeof(cpu_type_t), inf->endian) == CPU_TYPE_X86_64)
+		inf->mode = SINGLE;
+	new->ptr = inf->ptr +
+		rev(farch[i].offset, 0, sizeof(uint32_t), inf->endian);
+	new->end = new->ptr + rev(farch[i].size, 0, sizeof(uint32_t), inf->endian);
+	new->file_name = inf->file_name;
+	return (0);
+}
+
+/*
+**	t:
+**		index 0: i;
+**		index 1: narch;
+*/
+
 int			obj_fat(t_info *inf)
 {
 	struct fat_header	*fheader;
 	struct fat_arch		*farch;
-	unsigned int		i;
 	t_info				new;
+	uint32_t			t[2];
 
-	if (check(inf, inf->ptr, sizeof(*fheader) + sizeof(*farch)))
+	if ((t[0] = -1) && check(inf, inf->ptr, sizeof(*fheader) + sizeof(*farch)))
 		return (-1);
 	fheader = (struct fat_header *)inf->ptr;
 	farch = (struct fat_arch *)(fheader + 1);
-	i = -1;
-	while (++i < rev(fheader->nfat_arch, 0, sizeof(uint32_t), inf->endian))
+	t[1] = rev(fheader->nfat_arch, 0, sizeof(uint32_t), inf->endian);
+	while (++t[0] < t[1])
 	{
-		if (inf->mode == FULL && i != rev(fheader->nfat_arch,
-			0, sizeof(uint32_t), inf->endian)
-			&& rev(fheader->nfat_arch, 0, sizeof(uint32_t), inf->endian) > 1)
+		if (inf->mode == FULL && t[0] != t[1] && t[1] > 1)
 			ft_putchar('\n');
-		if (check(inf, farch + i, sizeof(*farch)))
+		if (help_ft(inf, &new, farch, t[0]) || check(inf, new.ptr, 0)
+				|| check(inf, new.end, 0))
 			return (-1);
-		if (rev(farch[i].cputype, 0,
-					sizeof(cpu_type_t), inf->endian) == CPU_TYPE_X86_64)
-			inf->mode = SINGLE;
-		new.ptr = inf->ptr +
-			rev(farch[i].offset, 0, sizeof(uint32_t), inf->endian);
-		new.end = new.ptr +
-			rev(farch[i].size, 0, sizeof(uint32_t), inf->endian);
-		new.file_name = inf->file_name;
-		if (check(inf, new.ptr, 0) || check(inf, new.end, 0))
-			return (-1);
-		if (inf->mode == SINGLE && rev(farch[i].cputype, 0,
+		if (inf->mode == SINGLE && rev(farch[t[0]].cputype, 0,
 					sizeof(cpu_type_t), inf->endian) == CPU_TYPE_X86_64)
 			return (analyse_object(&new));
 		if (inf->mode == FULL)
-			handle_full(inf->file_name, get_cputype(rev(farch[i].cputype,
-			0, sizeof(cpu_type_t), inf->endian)), &new,
-			rev(fheader->nfat_arch, 0, sizeof(uint32_t), inf->endian) > 1);
+			handle_full(inf->file_name, get_cputype(rev(farch[t[0]].cputype,
+			0, sizeof(cpu_type_t), inf->endian)), &new, t[1] > 1);
 	}
-	if (inf->mode == FULL)
-		return (0);
-	inf->mode = FULL;
-	return (obj_fat(inf));
+	return (help_end(inf));
 }
 
-int		obj_fat64(t_info *inf)
+int			obj_fat64(t_info *inf)
 {
-	(void)inf;
-	return 42;
+	struct fat_header	*fheader;
+	struct fat_arch_64	*farch;
+	t_info				new;
+	uint32_t			t[2];
+
+	if ((t[0] = -1) && check(inf, inf->ptr, sizeof(*fheader) + sizeof(*farch)))
+		return (-1);
+	fheader = (struct fat_header *)inf->ptr;
+	farch = (struct fat_arch_64 *)(fheader + 1);
+	t[1] = rev(fheader->nfat_arch, 0, sizeof(uint32_t), inf->endian);
+	while (++t[0] < t[1])
+	{
+		if (inf->mode == FULL && t[0] != t[1] && t[1] > 1)
+			ft_putchar('\n');
+		if (help_ft64(inf, &new, farch, t[0]) || check(inf, new.ptr, 0)
+				|| check(inf, new.end, 0))
+			return (-1);
+		if (inf->mode == SINGLE && rev(farch[t[0]].cputype, 0,
+					sizeof(cpu_type_t), inf->endian) == CPU_TYPE_X86_64)
+			return (analyse_object(&new));
+		if (inf->mode == FULL)
+			handle_full(inf->file_name, get_cputype(rev(farch[t[0]].cputype,
+			0, sizeof(cpu_type_t), inf->endian)), &new, t[1] > 1);
+	}
+	return (help_end64(inf));
 }
