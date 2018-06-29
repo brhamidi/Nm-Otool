@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/13 18:48:56 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/29 16:08:22 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/29 17:00:49 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,11 @@ int			obj_fat(t_info *inf)
 			return (-1);
 		if (inf->mode == SINGLE && rev(farch[i].cputype, 0,
 					sizeof(cpu_type_t), inf->endian) == CPU_TYPE_X86_64)
+		{
+			ft_putstr(inf->file_name);
+			ft_putendl(":");
 			return (analyse_object(&new));
+		}
 		if (inf->mode == FULL)
 			handle_full(inf->file_name, get_cputype(rev(farch[i].cputype,
 			0, sizeof(cpu_type_t), inf->endian)), &new,
