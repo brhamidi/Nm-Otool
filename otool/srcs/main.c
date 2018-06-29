@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 16:30:04 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/28 20:26:58 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/29 16:36:22 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,11 @@ int		analyse_file(t_info *inf)
 	i = -1;
 	while (++i < 4)
 		if (magic_tab[i] == rev(magic, 0, 4, inf->endian))
+		{
+			if (!(magic_tab[i] == FAT_MAGIC || magic_tab[i] == FAT_MAGIC_64))
+				ft_putendl(inf->file_name);
 			return (func_tab[i](inf));
+		}
 	ft_putendl_fd("The file was not recognized as a valid object file", 2);
 	return (-2);
 }
@@ -118,8 +122,6 @@ int		rec_arg(const int ac, const char **av, const int acc)
 	code = 0;
 	if (acc == ac)
 		return (0);
-	ft_putstr(av[acc]);
-	ft_putstr(":\n");
 	code = map_file(av[acc]);
 	if (code == 2)
 		error_file(av[0], av[acc]);

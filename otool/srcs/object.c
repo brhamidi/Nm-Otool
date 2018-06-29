@@ -6,16 +6,18 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/13 18:49:21 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/28 20:18:46 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/29 16:32:23 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_otool.h"
 
-void		put_value(const unsigned long int n, int padd)
+void		put_value(const unsigned long int n, const unsigned long int padd)
 {
 	const unsigned int len = ft_nbytes(n, 16);
 
+	if (len > padd)
+		return ;
 	ft_putnchar('0', padd - len);
 	ft_putulongnbr(n, 16);
 	ft_putchar('\t');
@@ -98,7 +100,7 @@ int		loop_sect(t_info *inf, void *curr, uint32_t nsects)
 		return (print_text_section(inf, inf->ptr + rev(sect->offset, 0,
 					sizeof(uint32_t), inf->endian), 
 				rev(sect->size, 0, sizeof(uint32_t), inf->endian), 1
-				,rev(sect->addr, 0, sizeof(uint64_t), inf->endian)));
+				,rev(sect->addr, 0, sizeof(uint32_t), inf->endian)));
 	}
 	return (loop_sect(inf, sect + 1, nsects - 1));
 }

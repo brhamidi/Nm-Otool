@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/13 18:48:56 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/28 15:01:25 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/29 16:08:22 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,20 @@ const char	*get_cputype(cpu_type_t cputype)
 	return ("?");
 }
 
+void		handle_full(const char *filename,
+		const char *cpu_type, t_info *new, int arch)
+{
+	ft_putstr(filename);
+	if (arch)
+	{
+		ft_putstr(" (for architecture ");
+		ft_putstr(cpu_type);
+		ft_putstr(")");
+	}
+	ft_putendl(":");
+	analyse_object(new);
+}
+
 int			obj_fat(t_info *inf)
 {
 	struct fat_header	*fheader;
@@ -67,9 +81,6 @@ int			obj_fat(t_info *inf)
 	i = -1;
 	while (++i < rev(fheader->nfat_arch, 0, sizeof(uint32_t), inf->endian))
 	{
-		if (inf->mode == FULL && i != rev(fheader->nfat_arch,
-					0, sizeof(uint32_t), inf->endian))
-			ft_putchar('\n');
 		if (check(inf, farch + i, sizeof(*farch)))
 			return (-1);
 		if (rev(farch[i].cputype, 0,
@@ -86,14 +97,9 @@ int			obj_fat(t_info *inf)
 					sizeof(cpu_type_t), inf->endian) == CPU_TYPE_X86_64)
 			return (analyse_object(&new));
 		if (inf->mode == FULL)
-		{
-			ft_putstr(inf->file_name);
-			ft_putstr(" (for architecture ");
-			ft_putstr(get_cputype(rev(farch[i].cputype,
-							0, sizeof(cpu_type_t), inf->endian)));
-			ft_putendl("):");
-			analyse_object(&new);
-		}
+			handle_full(inf->file_name, get_cputype(rev(farch[i].cputype,
+			0, sizeof(cpu_type_t), inf->endian)), &new,
+			rev(fheader->nfat_arch, 0, sizeof(uint32_t), inf->endian) > 1);
 	}
 	if (inf->mode == FULL)
 		return (0);
