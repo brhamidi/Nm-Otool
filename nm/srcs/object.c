@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/27 15:20:10 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/29 20:08:24 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/30 14:44:28 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,15 @@ int		ft_nlist64(t_info *inf, struct nlist_64 *nlist,
 {
 	if (!nsyms)
 	{
-		if (basic_sort(inf->list, inf->ptr + stroff, predicat64, inf) == -1)
-			return (free_list(inf->list) + 1);
+		if (!(inf->opt & OPT_P))
+			if (basic_sort(inf->list, inf->ptr + stroff, predicat64, inf) == -1)
+				return (free_list(inf->list) + 1);
 		display_info64(inf->list, inf, inf->ptr + stroff);
 		return (free_list(inf->list));
 	}
 	if (check(inf, nlist, sizeof(*nlist)))
 		return (-1);
-	push_front(&inf->list, nlist);
+	push_back(&inf->list, nlist);
 	return (ft_nlist64(inf, nlist + 1, nsyms - 1, stroff));
 }
 

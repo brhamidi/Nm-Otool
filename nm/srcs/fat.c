@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/13 18:48:56 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/29 19:59:04 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/30 14:41:11 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ int			help_ft(t_info *inf, t_info *new,
 		rev(farch[i].offset, 0, sizeof(uint32_t), inf->endian);
 	new->end = new->ptr + rev(farch[i].size, 0, sizeof(uint32_t), inf->endian);
 	new->file_name = inf->file_name;
+	new->opt = inf->opt;
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/04 18:24:50 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/29 18:39:33 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/30 14:30:02 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,25 @@ int		free_list(t_sym *head)
 		tmp = head;
 		head = head->next;
 		free(tmp);
+	}
+	return (0);
+}
+
+int		push_back(t_sym **head, void *e)
+{
+	t_sym	*ptr;
+	t_sym	*new;
+
+	if (!(new = create_node(e)))
+		return (1);
+	ptr = *head;
+	if (!ptr)
+		*head = new;
+	else
+	{
+		while (ptr->next)
+			ptr = ptr->next;
+		ptr->next = new;
 	}
 	return (0);
 }

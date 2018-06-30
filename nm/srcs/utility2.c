@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/29 19:57:21 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/29 20:09:46 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/30 14:54:01 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	display_info(const t_sym *node, t_info *inf, const char *strtable)
 		return ;
 	list = (struct nlist *)node->sym;
 	type = rev(list->n_type, 0, 1, inf->endian);
-	if (type & N_STAB)
+	if (type & N_STAB && !(inf->opt & OPT_A))
 		return (display_info(node->next, inf, strtable));
 	if ((type & N_TYPE) == N_UNDF)
 		ft_putnchar(' ', 8);
@@ -76,13 +76,14 @@ int		ft_nlist(t_info *inf, struct nlist *nlist,
 {
 	if (!nsyms)
 	{
-		if (basic_sort(inf->list, inf->ptr + stroff, predicat64, inf) == -1)
-			return (free_list(inf->list) + 1);
+		if (!(inf->opt & OPT_P))
+			if (basic_sort(inf->list, inf->ptr + stroff, predicat64, inf) == -1)
+				return (free_list(inf->list) + 1);
 		display_info(inf->list, inf, inf->ptr + stroff);
 		return (free_list(inf->list));
 	}
 	if (check(inf, nlist, sizeof(*nlist)))
 		return (-1);
-	push_front(&inf->list, nlist);
+	push_back(&inf->list, nlist);
 	return (ft_nlist(inf, nlist + 1, nsyms - 1, stroff));
 }

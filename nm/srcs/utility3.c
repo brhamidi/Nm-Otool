@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/29 20:02:25 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/29 20:07:57 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/30 14:53:52 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ char	get_sign_char(t_info *inf, const struct nlist *nlist, int mode)
 	}
 	if ((type & N_TYPE) == N_SECT)
 		return (get_segment(inf, sect, mode));
+	if (type & N_STAB)
+		return ('-');
 	return ('?');
 }
 
@@ -71,7 +73,7 @@ void	display_info64(const t_sym *node, t_info *inf, const char *strtable)
 		return ;
 	list = (struct nlist_64 *)node->sym;
 	type = rev(list->n_type, 0, 1, inf->endian);
-	if (type & N_STAB)
+	if (type & N_STAB && !(inf->opt & OPT_A))
 		return (display_info64(node->next, inf, strtable));
 	if ((type & N_TYPE) == N_UNDF)
 		ft_putnchar(' ', 16);

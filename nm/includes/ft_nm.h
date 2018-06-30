@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 16:31:03 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/30 13:37:09 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/30 14:56:43 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ struct				s_sym
 	struct s_sym	*next;
 };
 
+int					push_back(t_sym **head, void *e);
 int					get_opt(unsigned char *opt, int ac, char **av);
 int					ft_nlist(t_info *inf, struct nlist *nlist,
 		uint32_t nsyms, uint32_t stroff);

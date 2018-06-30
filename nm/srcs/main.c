@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 16:30:04 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/30 14:05:43 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/30 14:40:17 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ int		rec_arg(const int ac, const char **av, const int acc, uint8_t opt)
 int		main(int ac, char **av)
 {
 	uint8_t			opt;
-	const int i =	get_opt(&opt, ac, av);
+	const int		i = get_opt(&opt, ac, av);
 
 	if (ac - i == 1)
 	{

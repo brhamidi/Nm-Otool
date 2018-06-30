@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/29 18:39:44 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/29 18:39:57 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/30 14:59:07 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,12 @@ int		predicat64(t_sym *a, t_sym *b, const char *strtable, t_info *inf)
 	if (str_safe(inf, (void *)strtable + an_strx)
 			|| str_safe(inf, (void *)strtable + bn_strx))
 		return (-1);
+	if (inf->opt & OPT_R)
+	{
+		if (ft_strcmp(strtable + an_strx, strtable + bn_strx) == 0)
+			return (a_nlist->n_value < b_nlist->n_value);
+		return (ft_strcmp(strtable + an_strx, strtable + bn_strx) < 0 ? 1 : 0);
+	}
 	if (ft_strcmp(strtable + an_strx, strtable + bn_strx) == 0)
 		return (a_nlist->n_value > b_nlist->n_value);
 	return (ft_strcmp(strtable + an_strx, strtable + bn_strx) > 0 ? 1 : 0);
