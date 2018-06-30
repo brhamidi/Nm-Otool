@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 16:31:03 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/30 14:56:43 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/30 16:31:24 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,14 @@
 
 # include "libft.h"
 
-# define CHARS_OPT	"anpr"
+# define CHARS_OPT	"aUprj"
 # define DELIMIT	"--"
 
 # define OPT_A		0b00000001
-# define OPT_N		0b00000010
+# define OPT_U		0b00000010
 # define OPT_P		0b00000100
 # define OPT_R		0b00001000
+# define OPT_J		0b00010000
 
 typedef struct s_sym	t_sym;
 typedef struct s_info	t_info;

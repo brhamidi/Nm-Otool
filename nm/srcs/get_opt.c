@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/30 13:25:21 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/30 13:59:22 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/30 16:32:24 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	print_usage(char *str)
 {
 	ft_putstr("ft_nm: illegal option -- ");
 	ft_putendl(str);
-	ft_putendl_fd("usage: ft_nm [-arnpr] [file ...]", 2);
+	ft_putendl_fd("usage: ft_nm [-arUpj] [file ...]", 2);
 	exit(EXIT_FAILURE);
 }
 
@@ -43,10 +43,12 @@ void	fill_opt(unsigned char *opt, char *arg)
 	arg++;
 	while (*arg != '\0')
 	{
+		if (*arg == 'j')
+			*opt = *opt | OPT_J;
 		if (*arg == 'a')
 			*opt = *opt | OPT_A;
-		if (*arg == 'n')
-			*opt = *opt | OPT_N;
+		if (*arg == 'U')
+			*opt = *opt | OPT_U;
 		if (*arg == 'p')
 			*opt = *opt | OPT_P;
 		if (*arg == 'r')

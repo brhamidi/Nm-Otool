@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/29 19:57:21 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/30 14:54:01 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/30 16:48:57 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,32 +43,33 @@ int		help_end64(t_info *inf)
 	return (obj_fat64(inf));
 }
 
-void	display_info(const t_sym *node, t_info *inf, const char *strtable)
+void	display_info(const t_sym *node, t_info *inf, const char *strt)
 {
 	struct nlist	*list;
 	uint8_t			type;
 
-	if (!node)
-		return ;
-	if (check(inf, node->sym, sizeof(*list)))
+	if (!node || check(inf, node->sym, sizeof(*list)))
 		return ;
 	list = (struct nlist *)node->sym;
 	type = rev(list->n_type, 0, 1, inf->endian);
-	if (type & N_STAB && !(inf->opt & OPT_A))
-		return (display_info(node->next, inf, strtable));
-	if ((type & N_TYPE) == N_UNDF)
-		ft_putnchar(' ', 8);
-	else
-		put_value(rev(list->n_value, 0, sizeof(uint32_t), inf->endian), 8);
-	ft_putchar(' ');
-	ft_putchar(get_sign(inf, list, 0));
-	ft_putchar(' ');
-	if (str_safe(inf, strtable + rev(list->n_un.n_strx, 0,
+	if (((type & N_STAB) && !(inf->opt & OPT_A))
+		|| (((type & N_TYPE) == N_UNDF) && (inf->opt & OPT_U)))
+		return (display_info(node->next, inf, strt));
+	if (!(inf->opt & OPT_J))
+	{
+		if ((type & N_TYPE) == N_UNDF)
+			ft_putnchar(' ', 8);
+		else
+			put_value(rev(list->n_value, 0, sizeof(uint32_t), inf->endian), 8);
+		ft_putchar(' ');
+		ft_putchar(get_sign(inf, list, 0));
+		ft_putchar(' ');
+	}
+	if (str_safe(inf, strt + rev(list->n_un.n_strx, 0,
 					sizeof(uint32_t), inf->endian)))
 		return ;
-	ft_putendl(strtable + rev(list->n_un.n_strx, 0,
-				sizeof(uint32_t), inf->endian));
-	return (display_info(node->next, inf, strtable));
+	ft_putendl(strt + rev(list->n_un.n_strx, 0, sizeof(uint32_t), inf->endian));
+	return (display_info(node->next, inf, strt));
 }
 
 int		ft_nlist(t_info *inf, struct nlist *nlist,
