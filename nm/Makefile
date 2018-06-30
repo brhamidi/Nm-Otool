@@ -6,7 +6,7 @@
 #    By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/05/20 19:05:42 by bhamidi           #+#    #+#              #
-#    Updated: 2018/06/29 19:57:15 by bhamidi          ###   ########.fr        #
+#    Updated: 2018/06/30 13:25:40 by bhamidi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ SRC_PATH		= srcs/
 INCLUDE_PATH	= includes/
 
 OBJ		= main.o list_func.o object.o fat.o utility.o ranlib.o handle_sign.o \
-		  sort.o utility2.o utility3.o
+		  sort.o utility2.o utility3.o get_opt.o
 
 INCLUDE	= ft_nm.h
 

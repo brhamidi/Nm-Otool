@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 16:30:04 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/29 20:03:06 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/30 14:05:43 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int		analyse_file(t_info *inf)
 	return (-2);
 }
 
-int		map_file(const char *filename)
+int		map_file(const char *filename, uint8_t opt)
 {
 	int				fd;
 	struct stat		buf;
@@ -80,6 +80,7 @@ int		map_file(const char *filename)
 	if ((inf.ptr = mmap(0, buf.st_size, PROT_READ,
 					MAP_PRIVATE, fd, 0)) == MAP_FAILED)
 		return (4);
+	inf.opt = opt;
 	inf.end = inf.ptr + buf.st_size;
 	inf.mode = CHECK;
 	inf.file_name = filename;
@@ -91,7 +92,7 @@ int		map_file(const char *filename)
 	return (code);
 }
 
-int		rec_arg(const int ac, const char **av, const int acc)
+int		rec_arg(const int ac, const char **av, const int acc, uint8_t opt)
 {
 	int code;
 
@@ -101,26 +102,29 @@ int		rec_arg(const int ac, const char **av, const int acc)
 	ft_putchar('\n');
 	ft_putstr(av[acc]);
 	ft_putstr(":\n");
-	code = map_file(av[acc]);
+	code = map_file(av[acc], opt);
 	if (code == 2)
 		error_file(av[0], av[acc]);
 	if (code)
-		return (1 + rec_arg(ac, av, acc + 1));
-	return (rec_arg(ac, av, acc + 1));
+		return (1 + rec_arg(ac, av, acc + 1, opt));
+	return (rec_arg(ac, av, acc + 1, opt));
 }
 
 int		main(int ac, char **av)
 {
-	if (ac == 1)
+	uint8_t			opt;
+	const int i =	get_opt(&opt, ac, av);
+
+	if (ac - i == 1)
 	{
-		if (map_file("a.out") == 2)
+		if (map_file("a.out", opt) == 2)
 			return (error_file(av[0], "a.out"));
 	}
-	else if (ac == 2)
+	else if (ac - i == 2)
 	{
-		if (map_file(av[1]) == 2)
-			return (error_file(av[0], av[1]));
+		if (map_file(av[1 + i], opt) == 2)
+			return (error_file(av[0], av[1 + i]));
 	}
 	else
-		return (rec_arg(ac, (const char **)av, 1));
+		return (rec_arg(ac, (const char **)av, 1 + i, opt));
 }

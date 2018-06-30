@@ -6,7 +6,7 @@
 /*   By: bhamidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 16:31:03 by bhamidi           #+#    #+#             */
-/*   Updated: 2018/06/29 20:09:02 by bhamidi          ###   ########.fr       */
+/*   Updated: 2018/06/30 13:37:09 by bhamidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,14 @@
 # include <mach-o/ranlib.h>
 
 # include "libft.h"
+
+# define CHARS_OPT	"anpr"
+# define DELIMIT	"--"
+
+# define OPT_A		0b00000001
+# define OPT_N		0b00000010
+# define OPT_P		0b00000100
+# define OPT_R		0b00001000
 
 typedef struct s_sym	t_sym;
 typedef struct s_info	t_info;
@@ -56,6 +64,7 @@ struct				s_info
 	t_mode			mode;
 	void			*lc;
 	uint32_t		ncmds;
+	uint8_t			opt;
 };
 
 struct				s_sym
@@ -64,6 +73,7 @@ struct				s_sym
 	struct s_sym	*next;
 };
 
+int					get_opt(unsigned char *opt, int ac, char **av);
 int					ft_nlist(t_info *inf, struct nlist *nlist,
 		uint32_t nsyms, uint32_t stroff);
 void				display_info(const t_sym *node, t_info *inf,
